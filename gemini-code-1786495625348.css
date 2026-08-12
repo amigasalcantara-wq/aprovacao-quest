@@ -1,0 +1,155 @@
+:root {
+    --bg-color: #1a1a24;
+    --text-color: #33ff33; /* Verde retro terminal */
+    --accent-color: #ff0055;
+    --box-bg: #2a2a35;
+    --border-color: #444;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Press Start 2P', cursive, sans-serif; /* Fonte Pixelada */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 1rem;
+    font-size: 12px; /* Fonte base menor por causa do estilo pixel */
+}
+
+/* Efeito TV CRT (Baixo estímulo visual, mas cria imersão) */
+.scanlines {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 4px dashed var(--border-color);
+}
+
+h1 {
+    font-size: 1.5rem;
+    color: #ffcc00;
+    text-shadow: 2px 2px 0px #ff0055;
+    margin-bottom: 0.5rem;
+}
+
+/* Navegação Adaptável */
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+}
+
+.nav-btn {
+    background: var(--box-bg);
+    color: white;
+    border: 2px solid white;
+    padding: 0.8rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 10px;
+    flex: 1 1 100%; /* Mobile first: botões empilhados */
+}
+
+.nav-btn.active, .nav-btn:hover {
+    background: var(--text-color);
+    color: var(--bg-color);
+    border-color: var(--text-color);
+}
+
+/* Caixas e Formulários */
+.retro-box {
+    background: var(--box-bg);
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.retro-input {
+    background: #000;
+    color: #fff;
+    border: 2px solid var(--text-color);
+    padding: 0.8rem;
+    font-size: 10px;
+    width: 100%;
+}
+
+.action-btn {
+    background: #000;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    padding: 1rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    transition: all 0.2s;
+}
+
+.action-btn:active {
+    background: var(--text-color);
+    color: #000;
+}
+
+.action-btn.danger {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.retro-textarea {
+    width: 100%;
+    height: 200px;
+    background: #000;
+    color: #fff;
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    margin-top: 1rem;
+    resize: vertical;
+    font-size: 10px;
+}
+
+.hidden { display: none; }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-box {
+    background: var(--box-bg);
+    border: 2px solid #fff;
+    padding: 1rem;
+    text-align: center;
+}
+
+/* Media Queries para PC (Grid/Flexbox expandem) */
+@media (min-width: 768px) {
+    .nav-btn { flex: 1 1 auto; }
+    .filters { flex-direction: row; }
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    h1 { font-size: 2.5rem; }
+    body { font-size: 14px; }
+}
