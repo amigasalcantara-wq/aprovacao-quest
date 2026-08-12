@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovação Quest: A Jornada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scanlines"></div> <!-- Efeito de TV Antiga -->
+    
+    <header>
+        <h1>APROVAÇÃO QUEST</h1>
+        <p class="subtitle">Nível: Concurso Médio</p>
+        <div id="hp-bar">
+            <span>XP: <span id="xp-counter">0</span></span>
+        </div>
+    </header>
+
+    <nav>
+        <button onclick="changeTab('questoes')" class="nav-btn active">🕹️ MISSÕES (Questões)</button>
+        <button onclick="changeTab('redacao')" class="nav-btn">📜 PERGAMINHO (Redação)</button>
+        <button onclick="changeTab('status')" class="nav-btn">🛡️ STATUS (Histórico)</button>
+    </nav>
+
+    <main>
+        <!-- ABA DE QUESTÕES -->
+        <section id="questoes" class="tab-content active">
+            <h2>ESCOLHA SEU CAMINHO</h2>
+            
+            <div class="filters">
+                <select id="materia-select" class="retro-input">
+                    <option value="todas">Todas as Matérias</option>
+                    <option value="portugues">Língua Portuguesa</option>
+                    <option value="matematica">Raciocínio Lógico</option>
+                    <option value="informatica">Informática</option>
+                    <option value="direito">Noções de Direito</option>
+                </select>
+
+                <select id="dificuldade-select" class="retro-input">
+                    <option value="basico">🟢 Básico (Aquecimento)</option>
+                    <option value="intermediario">🟡 Intermediário (Treino)</option>
+                    <option value="avancado">🔴 Avançado (Desafio)</option>
+                    <option value="diferencial">🟣 Diferencial (Boss Fight)</option>
+                </select>
+            </div>
+
+            <div id="question-container" class="retro-box">
+                <!-- As questões aparecerão aqui via JS -->
+                <p>Pressione START (ou selecione acima) para carregar os desafios.</p>
+                <button class="action-btn" onclick="loadQuestion()">START</button>
+            </div>
+        </section>
+
+        <!-- ABA DE REDAÇÃO -->
+        <section id="redacao" class="tab-content" style="display: none;">
+            <h2>ORÁCULO DOS TEMAS</h2>
+            <p>Gerador de temas baseados em atualidades (Padrão Cebraspe/FGV).</p>
+            <button class="action-btn" onclick="gerarTema()">GERAR TEMA ALEATÓRIO</button>
+            
+            <div id="tema-gerado" class="retro-box hidden"></div>
+            
+            <textarea id="redacao-texto" class="retro-textarea" placeholder="Digite sua dissertação aqui... (Salvo automaticamente)"></textarea>
+            <button class="action-btn" onclick="simularAvaliacao()">ENVIAR PARA O MESTRE (Avaliar)</button>
+            
+            <div id="feedback-redacao" class="retro-box hidden"></div>
+        </section>
+
+        <!-- ABA DE STATUS/PROGRESSO -->
+        <section id="status" class="tab-content" style="display: none;">
+            <h2>INVENTÁRIO E STATUS</h2>
+            <div class="stats-grid">
+                <div class="stat-box">Acertos: <span id="stat-acertos">0</span></div>
+                <div class="stat-box">Erros: <span id="stat-erros">0</span></div>
+                <div class="stat-box">Redações: <span id="stat-redacoes">0</span></div>
+            </div>
+            
+            <div class="retro-box">
+                <h3>SABEDORIA DO MENTOR:</h3>
+                <p id="mentor-feedback">Analise dados para ver sugestões...</p>
+                <button class="action-btn" onclick="gerarAnaliseMentor()">SOLICITAR ANÁLISE</button>
+            </div>
+            <button class="action-btn danger" onclick="resetarProgresso()">RESETAR SAVE</button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
