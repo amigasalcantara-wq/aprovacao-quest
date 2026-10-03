@@ -2,24 +2,23 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Chronicles of the Kernel: O Despertar da Memória</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Chronicles of the Kernel: Mobile RPG</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --font-display: 'Press Start 2P', monospace;
-      --font-mono: 'Share Tech Mono', monospace;
       --font-body: 'Inter', sans-serif;
 
-      /* Tema Cyberpunk / Borahae Acadêmico */
-      --bg-color: #070913;
-      --panel-bg: #0f1322;
+      /* Borahae / Cyberpunk Padrão */
+      --bg-color: #0b0718;
+      --panel-bg: #140e28;
       --panel-border: #6366f1;
-      --accent: #a855f7;
-      --accent-glow: rgba(168, 85, 247, 0.35);
+      --accent: #c084fc;
+      --accent-glow: rgba(192, 132, 252, 0.25);
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --success: #10b981;
@@ -28,36 +27,36 @@
     }
 
     body[data-theme="untamed"] {
-      --bg-color: #0d0404;
-      --panel-bg: #1a0808;
+      --bg-color: #0e0505;
+      --panel-bg: #1c0a0a;
       --panel-border: #991b1b;
       --accent: #f87171;
-      --accent-glow: rgba(248, 113, 113, 0.35);
+      --accent-glow: rgba(248, 113, 113, 0.25);
       --text: #fef2f2;
       --text-muted: #bda3a3;
     }
 
     body[data-theme="ghibli"] {
-      --bg-color: #041009;
-      --panel-bg: #092013;
+      --bg-color: #041209;
+      --panel-bg: #092415;
       --panel-border: #166534;
       --accent: #4ade80;
-      --accent-glow: rgba(74, 222, 128, 0.35);
+      --accent-glow: rgba(74, 222, 128, 0.25);
       --text: #f0fdf4;
       --text-muted: #86a894;
     }
 
     body[data-theme="coraline"] {
-      --bg-color: #080917;
-      --panel-bg: #111429;
+      --bg-color: #080918;
+      --panel-bg: #12142e;
       --panel-border: #3730a3;
-      --accent: #ec4899;
-      --accent-glow: rgba(236, 72, 153, 0.35);
+      --accent: #f472b6;
+      --accent-glow: rgba(244, 114, 182, 0.25);
       --text: #fdf2f8;
       --text-muted: #9ca3af;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
       background-color: var(--bg-color);
@@ -67,548 +66,493 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      padding: 8px 12px 24px 12px;
+      line-height: 1.5;
       user-select: none;
-      transition: background-color 0.4s ease;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease;
     }
 
-    .game-wrapper {
+    .app-container {
       width: 100%;
-      max-width: 900px;
+      max-width: 480px; /* Largura ideal para smartphones */
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
-    /* HEADER & UNIVERSOS */
+    /* BARRA SUPERIOR COMPACTA */
     header {
       background: var(--panel-bg);
-      border: 2px solid var(--panel-border);
+      border: 1.5px solid var(--panel-border);
       border-radius: 8px;
-      padding: 12px 18px;
+      padding: 8px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      box-shadow: 0 4px 14px var(--accent-glow);
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
 
-    .title-box {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .title-main {
+    .brand-title {
       font-family: var(--font-display);
-      font-size: 11px;
+      font-size: 9px;
       color: var(--accent);
       letter-spacing: 0.5px;
     }
-    .title-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
 
-    .theme-picker { display: flex; gap: 4px; }
-    .btn-theme {
+    .theme-bubbles {
+      display: flex;
+      gap: 6px;
+    }
+    .btn-bubble {
       background: rgba(0,0,0,0.4);
       border: 1px solid var(--panel-border);
-      border-radius: 4px;
-      color: var(--text-muted);
-      font-size: 11px;
-      padding: 5px 9px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .btn-theme.active, .btn-theme:hover {
-      background: var(--accent);
-      color: #000;
-      border-color: var(--accent);
-    }
-
-    /* STATUS ACADÊMICO & MAESTRIA */
-    .status-dashboard {
-      background: var(--panel-bg);
-      border: 2px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
-      align-items: center;
-    }
-
-    .stat-card {
-      background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 6px;
-      padding: 8px 12px;
+      font-size: 13px;
+      padding: 4px 8px;
+      cursor: pointer;
     }
-    .stat-card h5 {
+    .btn-bubble.active {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* CARD DE STATUS & PROGRESSO */
+    .hero-status {
+      background: var(--panel-bg);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+    .rank-tag {
       font-family: var(--font-display);
       font-size: 8px;
       color: var(--warn);
-      margin-bottom: 4px;
-    }
-    .stat-card strong {
-      font-size: 13px;
-      color: var(--text);
     }
 
-    /* TELA DO JOGO (CANVAS RETRÔ) */
-    .canvas-viewport {
+    /* MAPA INTERATIVO TOUCH (GAME BOY EDITION) */
+    .map-frame {
       position: relative;
       background: #000;
-      border: 3px solid var(--panel-border);
+      border: 2px solid var(--panel-border);
       border-radius: 10px;
       overflow: hidden;
       width: 100%;
-      height: 440px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.9);
+      height: 230px; /* Tamanho proporcional para tela vertical */
+      box-shadow: 0 0 16px rgba(0,0,0,0.8);
+      touch-action: none;
     }
 
-    canvas#gameCanvas {
+    canvas#worldCanvas {
       width: 100%;
       height: 100%;
       display: block;
       image-rendering: pixelated;
     }
 
-    /* HUD DE OVERLAY */
-    .hud-overlay {
+    .map-hint {
       position: absolute;
-      top: 10px; left: 10px; right: 10px;
-      display: flex;
-      justify-content: space-between;
+      bottom: 6px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      background: rgba(0,0,0,0.5);
+      padding: 2px 0;
       pointer-events: none;
     }
-    .hud-tag {
-      background: rgba(0,0,0,0.8);
-      border: 1px solid var(--accent);
-      border-radius: 4px;
-      padding: 4px 8px;
-      font-family: var(--font-display);
-      font-size: 8px;
-      color: var(--text);
+
+    /* QUADRO DE SETORES TOUCH (ATALHOS DIRETOS) */
+    .sectors-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
 
-    /* DIÁLOGO SOCRÁTICO / MISSÃO INTERATIVA */
-    .dialogue-modal {
-      display: none;
-      position: absolute;
-      bottom: 12px; left: 12px; right: 12px;
+    .btn-sector {
       background: var(--panel-bg);
-      border: 2px solid var(--accent);
+      border: 1.5px solid var(--panel-border);
       border-radius: 8px;
-      padding: 14px 18px;
-      z-index: 10;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.9);
-      max-height: 85%;
-      overflow-y: auto;
-    }
-    .dialogue-modal.active { display: block; animation: slideUp 0.2s ease; }
-
-    .npc-header {
+      padding: 10px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
     }
-    .npc-name {
-      font-family: var(--font-display);
+    .btn-sector:active {
+      transform: scale(0.97);
+      border-color: var(--accent);
+    }
+    .btn-sector.done {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .sector-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .sector-name {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--text);
+    }
+    .sector-sub {
       font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* MODAL DE MISSÃO ACADÊMICA */
+    .mission-sheet {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      padding: 16px;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .mission-sheet.active {
+      display: flex;
+      animation: sheetUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sheet-card {
+      background: var(--panel-bg);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 460px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 18px;
+      box-shadow: 0 -4px 25px rgba(0,0,0,0.9);
+    }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .sheet-title {
+      font-family: var(--font-display);
+      font-size: 9px;
       color: var(--warn);
     }
 
-    .npc-lore {
-      font-size: 14px;
-      line-height: 1.5;
-      color: #e2e8f0;
-      margin-bottom: 12px;
-    }
-
-    .lab-challenge {
-      background: rgba(0,0,0,0.5);
-      border: 1px dashed var(--accent);
-      border-radius: 6px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
-    .challenge-title {
-      font-family: var(--font-display);
-      font-size: 9px;
-      color: var(--accent);
-      margin-bottom: 6px;
-    }
-    .challenge-desc {
+    .lore-text {
       font-size: 13px;
-      color: #f1f5f9;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .challenge-box {
+      background: rgba(0,0,0,0.4);
+      border: 1px dashed var(--accent);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .challenge-q {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
       margin-bottom: 12px;
     }
 
-    .options-grid {
+    .choices-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
-    .btn-choice {
-      background: rgba(255,255,255,0.05);
+
+    .btn-option {
+      background: rgba(255,255,255,0.04);
       border: 1px solid var(--panel-border);
-      border-radius: 6px;
+      border-radius: 8px;
       color: var(--text);
       font-family: var(--font-body);
       font-size: 13px;
-      padding: 10px 14px;
+      padding: 12px 14px;
       text-align: left;
       cursor: pointer;
       line-height: 1.4;
-      transition: all 0.2s;
+      min-height: 48px; /* Touch target ergonômico */
     }
-    .btn-choice:hover {
+    .btn-option:active {
+      background: var(--accent-glow);
       border-color: var(--accent);
-      background: rgba(168,85,247,0.15);
-      transform: translateX(3px);
     }
 
-    .action-row {
+    .sheet-actions {
       display: flex;
       justify-content: flex-end;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 14px;
     }
-    .btn-action {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 8px 14px;
-      cursor: pointer;
-    }
-    .btn-close {
+    .btn-sheet-close {
       background: transparent;
-      color: var(--text-muted);
-      border: 1px solid var(--panel-border);
-      border-radius: 4px;
-      font-size: 12px;
-      padding: 8px 12px;
-      cursor: pointer;
-    }
-
-    /* CONTROLES MÓVEIS (D-PAD TOUCH) */
-    .touch-controls {
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--panel-bg);
-      border: 2px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 10px 16px;
-    }
-    @media (max-width: 768px) {
-      .touch-controls { display: flex; }
-      .canvas-viewport { height: 380px; }
-    }
-
-    .dpad {
-      display: grid;
-      grid-template-columns: repeat(3, 40px);
-      grid-template-rows: repeat(3, 40px);
-      gap: 4px;
-    }
-    .dpad button {
-      background: rgba(0,0,0,0.6);
       border: 1px solid var(--panel-border);
       border-radius: 6px;
-      color: var(--accent);
-      font-family: var(--font-display);
-      font-size: 11px;
+      color: var(--text-muted);
+      padding: 8px 14px;
+      font-size: 12px;
       cursor: pointer;
     }
-    .dpad button:active { background: var(--accent); color: #000; }
 
-    .btn-touch-act {
-      background: var(--warn);
-      color: #000;
-      border: none;
-      border-radius: 50%;
-      width: 62px;
-      height: 62px;
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(245,158,11,0.3);
-    }
-    .btn-touch-act:active { transform: scale(0.95); }
-
-    @keyframes slideUp {
-      from { transform: translateY(10px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    @keyframes sheetUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
     }
   </style>
 </head>
 <body data-theme="bts">
 
-  <div class="game-wrapper">
+  <div class="app-container">
     <!-- HEADER -->
     <header>
-      <div class="title-box">
-        <div class="title-main">⚡ CHRONICLES OF THE KERNEL</div>
-        <div class="title-sub">Amanda • Laboratório de Sistemas & Computação</div>
-      </div>
-      <div class="theme-picker">
-        <button class="btn-theme active" onclick="setTheme('bts', event)">💜 BTS</button>
-        <button class="btn-theme" onclick="setTheme('untamed', event)">🏮 Untamed</button>
-        <button class="btn-theme" onclick="setTheme('ghibli', event)">🌿 Ghibli</button>
-        <button class="btn-theme" onclick="setTheme('coraline', event)">🗝️ Coraline</button>
+      <div class="brand-title">⚡ KERNEL CHRONICLES</div>
+      <div class="theme-bubbles">
+        <button class="btn-bubble active" onclick="setTheme('bts', event)">💜</button>
+        <button class="btn-bubble" onclick="setTheme('untamed', event)">🏮</button>
+        <button class="btn-bubble" onclick="setTheme('ghibli', event)">🌿</button>
+        <button class="btn-bubble" onclick="setTheme('coraline', event)">🗝️</button>
       </div>
     </header>
 
-    <!-- STATUS ACADÊMICO & MAESTRIA DE CONCEITOS -->
-    <div class="status-dashboard">
-      <div class="stat-card">
-        <h5>MAESTRIA DE CÓDIGO</h5>
-        <strong id="stat-rank">🌱 Nível 1: Compilador Iniciante</strong>
+    <!-- STATUS DO JOGADOR -->
+    <div class="hero-status">
+      <div>
+        <div class="rank-tag" id="ui-rank">NÍVEL 1: COMPILADOR</div>
+        <div style="font-size:13px; font-weight:700; color:#fff;" id="ui-xp">0 XP</div>
       </div>
-      <div class="stat-card">
-        <h5>EXPERIÊNCIA (XP)</h5>
-        <strong id="stat-xp">0 XP</strong>
-      </div>
-      <div class="stat-card">
-        <h5>DESAFIOS DOMINADOS</h5>
-        <strong id="stat-missions">0 / 4 Núcleos</strong>
-      </div>
-      <div class="stat-card">
-        <h5>GRIMÓRIO DE RELÍQUIAS</h5>
-        <strong id="stat-relics">Nenhuma relíquia</strong>
+      <div style="text-align:right;">
+        <div style="font-size:11px; color:var(--text-muted);">RELÍQUIAS</div>
+        <div id="ui-relics" style="font-size:14px;">Nenhuma</div>
       </div>
     </div>
 
-    <!-- TELA PRINCIPAL (CANVAS TOP-DOWN) -->
-    <div class="canvas-viewport">
-      <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <!-- VIEWPORT DO MAPA (TOUCH INTERATIVO) -->
+    <div class="map-frame" id="mapFrame">
+      <canvas id="worldCanvas" width="400" height="230"></canvas>
+      <div class="map-hint">Toque em qualquer setor no mapa ou nos botões abaixo</div>
+    </div>
 
-      <div class="hud-overlay">
-        <div class="hud-tag" id="hud-zone">SETOR: TERMINAL DE BOOT</div>
-        <div class="hud-tag">CONTROLES: [W, A, S, D] • APROXIME E APERTE [ESPAÇO]</div>
+    <!-- SELETORES TOUCH DE SETORES (ACESSO RÁPIDO NO POLEGAR) -->
+    <div class="sectors-grid">
+      <div class="btn-sector" id="btn-sec-ponteiros" onclick="teleportTo('ponteiros')">
+        <div class="sector-icon">🏮</div>
+        <div>
+          <div class="sector-name">Forjas do Heap</div>
+          <div class="sector-sub">Linguagem C // Ponteiros</div>
+        </div>
       </div>
 
-      <!-- MODAL DE DIÁLOGO E DESAFIOS PEDAGÓGICOS -->
-      <div class="dialogue-modal" id="dialogueBox">
-        <div class="npc-header">
-          <div class="npc-name" id="npcName">NOME DO NPC</div>
-          <span style="font-size:11px; color:var(--text-muted);" id="npcRole">DISCIPLINA</span>
+      <div class="btn-sector" id="btn-sec-memoria" onclick="teleportTo('memoria')">
+        <div class="sector-icon">🔥</div>
+        <div>
+          <div class="sector-name">Labirinto Virtual</div>
+          <div class="sector-sub">S.O. // MMU & TLB</div>
         </div>
-        <div class="npc-lore" id="npcLore">Lore e explicação contextualizada.</div>
+      </div>
 
-        <div class="lab-challenge" id="challengeBox">
-          <div class="challenge-title" id="challengeTitle">DESAFIO DE APLICAÇÃO</div>
-          <div class="challenge-desc" id="challengeDesc">Descrição do problema real.</div>
-          <div class="options-grid" id="challengeOpts"></div>
+      <div class="btn-sector" id="btn-sec-io" onclick="teleportTo('io')">
+        <div class="sector-icon">🗝️</div>
+        <div>
+          <div class="sector-name">Câmara dos Discos</div>
+          <div class="sector-sub">S.O. // I/O & FAT</div>
         </div>
+      </div>
 
-        <div class="action-row" id="dialogueActions">
-          <button class="btn-close" onclick="closeDialogue()">Fechar Painel</button>
+      <div class="btn-sector" id="btn-sec-filosofia" onclick="teleportTo('filosofia')">
+        <div class="sector-icon">💜</div>
+        <div>
+          <div class="sector-name">Templo Dialético</div>
+          <div class="sector-sub">Filosofia // Episteme</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- CONTROLES TOUCH PARA SMARTPHONE -->
-    <div class="touch-controls">
-      <div class="dpad">
-        <div></div>
-        <button onclick="movePlayer(0, -25)">▲</button>
-        <div></div>
-        <button onclick="movePlayer(-25, 0)">◀</button>
-        <div></div>
-        <button onclick="movePlayer(25, 0)">▶</button>
-        <div></div>
-        <button onclick="movePlayer(0, 25)">▼</button>
-        <div></div>
+  <!-- MODAL DE DIÁLOGO E DESAFIO -->
+  <div class="mission-sheet" id="missionSheet">
+    <div class="sheet-card">
+      <div class="sheet-header">
+        <div class="sheet-title" id="sheetNpc">NOME DO NPC</div>
+        <span style="font-size:11px; color:var(--text-muted);" id="sheetTopic">TEMA</span>
       </div>
-      <div style="font-size:12px; color:var(--text-muted); text-align:center;">
-        Caminhe até um autômato<br>e toque em <strong>INTERAGIR</strong>
+
+      <div class="lore-text" id="sheetLore">Lore contextual do setor.</div>
+
+      <div class="challenge-box" id="sheetChallengeBox">
+        <div class="challenge-q" id="sheetQuestion">Enunciado do problema prático...</div>
+        <div class="choices-list" id="sheetChoices"></div>
       </div>
-      <button class="btn-touch-act" onclick="triggerInteract()">AÇÃO</button>
+
+      <div class="sheet-actions" id="sheetActions">
+        <button class="btn-sheet-close" onclick="closeSheet()">Fechar</button>
+      </div>
     </div>
   </div>
 
   <script>
     /* =========================================================
-       1. ARQUITETURA DO JOGO E MAPA ACADÊMICO
+       1. MAPA & DADOS PEDAGÓGICOS (DOS SEUS MATERIAIS)
        ========================================================= */
-    const canvas = document.getElementById("gameCanvas");
+    const canvas = document.getElementById("worldCanvas");
     const ctx = canvas.getContext("2d");
 
     let currentTheme = "bts";
 
-    const RELIC_LIST = {
-      bts: "💜 Microfone Imperial de Baixo Nível",
-      untamed: "🏮 Flauta Chenqing dos Ponteiros",
-      ghibli: "🔥 Fogo Vivo de Calcifer (TLB Hit)",
-      coraline: "🗝️ Chave dos Inodes e Diretórios"
+    const RELICS = {
+      bts: "💜 Microfone Borahae",
+      untamed: "🏮 Flauta Chenqing",
+      ghibli: "🔥 Fogo de Calcifer",
+      coraline: "🗝️ Chave de Botão"
     };
 
-    // Os 4 Distritos Acadêmicos baseados nos seus materiais
-    const ZONES = [
+    const SECTORS = [
       {
         id: "ponteiros",
-        name: "Forjas do Heap (Linguagem C)",
-        x: 60, y: 50, w: 160, h: 120,
-        color: "#311042",
-        npc: {
-          name: "Mestre Dennis Ritchie",
-          role: "Técnicas de Programação // Ponteiros",
-          symbol: "🏮",
-          lore: "Bem-vinda às Forjas da Memória! Em Linguagem C, manipular diretamente a memória dá imenso poder ao programador, mas exige extremo rigor.",
-          challenge: {
-            title: "O Enigma do Escaninho de Memória (0x104)",
-            desc: "Temos uma variável inteira 'int valor = 42;' alocada no endereço 0x104. Queremos que a função 'dobrar()' altere o valor original para 84 sem criar cópias na pilha.",
-            options: [
-              {
-                text: "Passar '&valor' para a função e declarar o parâmetro como 'int *p', alterando com '*p = 84;'.",
-                correct: true,
-                feedback: "Perfeito! O operador '&' passa o endereço físico da variável (passagem por referência), e o operador '*' desreferencia o ponteiro, alterando diretamente o conteúdo no endereço 0x104 sem duplicar dados!"
-              },
-              {
-                text: "Passar 'valor' diretamente e na função fazer 'valor = 84;'.",
-                correct: false,
-                feedback: "Incorreto! Em C, argumentos padrão são passados por VALOR (cópia). A função alteraria apenas a cópia local na sua própria pilha, deixando o original em 42."
-              },
-              {
-                text: "Alocar com 'malloc(sizeof(valor))' sem guardar o ponteiro de retorno.",
-                correct: false,
-                feedback: "Perigo de Memory Leak! Alocar memória na heap sem salvar o endereço em um ponteiro consome RAM desnecessariamente e torna o bloco inacessível para liberação com free()."
-              }
-            ]
+        name: "Forjas do Heap",
+        npc: "Mestre Dennis Ritchie",
+        topic: "Linguagem C // Ponteiros & Heap",
+        symbol: "🏮",
+        x: 30, y: 20, w: 150, h: 80,
+        color: "#2e1065",
+        lore: "Bem-vinda às Forjas do Heap! Em Linguagem C, manipular endereços físicos confere alta performance, mas exige extremo controle da memória.",
+        question: "Uma variável inteira 'int valor = 42;' está no endereço 0x104. Como a função 'dobrar()' pode alterar o valor original para 84 na memória física sem fazer cópia?",
+        options: [
+          {
+            text: "Passar '&valor' e receber 'int *p', alterando com '*p = 84;'.",
+            correct: true,
+            feedback: "Correto! '&' passa o endereço físico (passagem por referência) e '*' desreferencia o ponteiro, alterando diretamente o escaninho 0x104 sem duplicar memória!"
+          },
+          {
+            text: "Passar 'valor' normalmente e fazer 'valor = 84;' na função.",
+            correct: false,
+            feedback: "Incorreto! Em C, argumentos normais são passados por VALOR (cópia). A função alteraria apenas a variável local da sua pilha, deixando o original em 42."
+          },
+          {
+            text: "Alocar com 'malloc(100)' sem usar 'free()' ao final.",
+            correct: false,
+            feedback: "Perigo de Vazamento de Memória (Memory Leak)! Toda memória alocada dinamicamente na heap deve ser liberada com free() quando não for mais usada."
           }
-        }
+        ]
       },
       {
-        id: "memoria_virtual",
-        name: "Labirinto Virtual (Sistemas Operacionais)",
-        x: 580, y: 50, w: 160, h: 120,
+        id: "memoria",
+        name: "Labirinto Virtual",
+        npc: "Guardião da MMU",
+        topic: "Sistemas Operacionais // Paginação & TLB",
+        symbol: "🔥",
+        x: 220, y: 20, w: 150, h: 80,
         color: "#083344",
-        npc: {
-          name: "Guardião da MMU & Paginação",
-          role: "Sistemas Operacionais // Unidade 3",
-          symbol: "🔥",
-          lore: "O reino virtual permite que os processos acessem um espaço muito maior do que a RAM física! Mas sem a Unidade de Gerenciamento de Memória (MMU), o sistema entra em colapso.",
-          challenge: {
-            title: "Tradução de Endereços & Cache TLB",
-            desc: "A CPU gera uma referência ao endereço lógico (Página 1, deslocamento 30). O sistema precisa buscar o dado com a menor latência possível.",
-            options: [
-              {
-                text: "A MMU consulta primeiro a cache TLB; ocorrendo 'TLB hit', obtém o bloco físico imediatamente sem ir à memória principal.",
-                correct: true,
-                feedback: "Exato! A Translation Lookaside Buffer (TLB) guarda as entradas recentes da tabela de páginas. O 'TLB hit' evita um acesso extra à memória física graças ao princípio da localidade!"
-              },
-              {
-                text: "O sistema operacional sempre lê primeiro a tabela de páginas armazenada no disco rígido.",
-                correct: false,
-                feedback: "Catastrófico! O disco é ordens de grandeza mais lento que a RAM. O disco só é acessado se ocorrer um 'Page Fault' (falta de página)."
-              },
-              {
-                text: "A tabela de páginas descarta a página imediatamente utilizando o algoritmo First-In-First-Out.",
-                correct: false,
-                feedback: "Incorreto! O algoritmo de substituição (como LRU ou FIFO) só é acionado quando a memória física estiver cheia e for necessário abrir espaço para um novo bloco."
-              }
-            ]
+        lore: "A memória virtual permite que processos utilizem mais espaço do que a RAM real! Mas a tradução de endereços virtuais para físicos precisa ser quase instantânea.",
+        question: "A CPU requisitou o endereço virtual (Página 1, deslocamento 30). Como a MMU evita buscar a página no disco rígido e garante a menor latência?",
+        options: [
+          {
+            text: "Consulta a cache TLB; em caso de 'TLB hit', obtém o bloco físico imediatamente.",
+            correct: true,
+            feedback: "Perfeito! A Translation Lookaside Buffer (TLB) armazena as traduções recentes. O 'TLB hit' evita acessos extras à memória física graças ao princípio da localidade!"
+          },
+          {
+            text: "Acessa sempre o disco rígido diretamente para cada instrução.",
+            correct: false,
+            feedback: "Catastrófico! O disco é ordens de grandeza mais lento que a memória principal. O disco só é acessado em falha de página ('Page Fault')."
+          },
+          {
+            text: "Descarta todas as páginas ativas usando o algoritmo FIFO.",
+            correct: false,
+            feedback: "Incorreto! Algoritmos de substituição (como LRU ou FIFO) só atuam quando a memória física estiver cheia e for preciso desalocar um quadro."
           }
-        }
+        ]
       },
       {
-        id: "arquivos_io",
-        name: "Câmara dos Discos & I/O (Sistemas Operacionais)",
-        x: 60, y: 230, w: 160, h: 120,
+        id: "io",
+        name: "Câmara dos Discos",
+        npc: "Sentinela de I/O & FAT",
+        topic: "Sistemas Operacionais // I/O & Arquivos",
+        symbol: "🗝️",
+        x: 30, y: 130, w: 150, h: 80,
         color: "#451a03",
-        npc: {
-          name: "Sentinela do Subsistema de I/O",
-          role: "Sistemas Operacionais // Unidade 4",
-          symbol: "🗝️",
-          lore: "A transferência de dados entre discos magnéticos, SSDs e periféricos não pode manter o processador refém em espera ociosa!",
-          challenge: {
-            title: "Arquitetura de Entrada e Saída",
-            desc: "Uma aplicação faz uma leitura pesada de arquivo em disco. Qual mecanismo impede que a CPU fique travada em laço de polling aguardando o dispositivo lento?",
-            options: [
-              {
-                text: "I/O baseado em Interrupção e DMA (Direct Memory Access), permitindo que a CPU processe outras tarefas enquanto o controlador transfere dados.",
-                correct: true,
-                feedback: "Excelente! O módulo de I/O avisa a CPU por sinal de interrupção quando a operação termina, e o DMA transfere blocos direto para a memória sem sobrecarregar o processador!"
-              },
-              {
-                text: "I/O Programado com laço contínuo de verificação de status na CPU.",
-                correct: false,
-                feedback: "Esse é justamente o problema! No I/O programado, a CPU fica monitorando ativamente o dispositivo lento e desperdiça preciosos ciclos de computação."
-              },
-              {
-                text: "Formatar o disco magnético utilizando tabela em nível único sem diretórios.",
-                correct: false,
-                feedback: "Incorreto! Sistemas de diretório em nível único são limitados, impedem nomes duplicados de arquivos e não têm relação com a liberação da CPU em operações de I/O."
-              }
-            ]
+        lore: "Dispositivos periféricos operam em velocidades mecânicas muito mais lentas que a CPU. Sem a arquitetura correta, o computador ficaria ocioso aguardando o disco.",
+        question: "Uma aplicação precisa ler um bloco grande de dados do disco. Qual técnica libera o processador para executar outras tarefas durante a leitura?",
+        options: [
+          {
+            text: "I/O por Interrupção com DMA (Direct Memory Access).",
+            correct: true,
+            feedback: "Exato! O DMA transfere os dados diretamente para a memória principal e avisa a CPU por interrupção apenas quando a transferência estiver concluída!"
+          },
+          {
+            text: "I/O Programado com espera ativa (busy waiting).",
+            correct: false,
+            feedback: "Esse é o problema clássico! No I/O programado, a CPU fica travada em loop consultando o status do dispositivo sem poder realizar nada mais."
+          },
+          {
+            text: "Desativar a tabela de alocação de arquivos (FAT).",
+            correct: false,
+            feedback: "Incorreto! A tabela de alocação é fundamental para encadear os blocos físicos não contíguos dos arquivos no disco."
           }
-        }
+        ]
       },
       {
-        id: "dialetica",
-        name: "Templo da Dialética & Metodologia",
-        x: 580, y: 230, w: 160, h: 120,
+        id: "filosofia",
+        name: "Templo Dialético",
+        npc: "Oráculo da Crítica",
+        topic: "Pensamento Filosófico // Episteme",
+        symbol: "💜",
+        x: 220, y: 130, w: 150, h: 80,
         color: "#4a044e",
-        npc: {
-          name: "Oráculo do Pensamento Crítico",
-          role: "Construção do Pensamento // Leitura Acadêmica",
-          symbol: "💜",
-          lore: "Não basta programar algoritmos: é preciso saber fundamentar hipóteses com rigor científico e desmascarar argumentos falaciosos.",
-          challenge: {
-            title: "Doxa vs. Episteme e Rigor Conceitual",
-            desc: "Ao redigir uma dissertação ou projeto técnico de software, como assegurar a validade e a legitimidade das conclusões apresentadas?",
-            options: [
-              {
-                text: "Superar a doxa (mera opinião subjetiva) através de fundamentação lógica, evidências demonstráveis e diálogo crítico com o estado da arte.",
-                correct: true,
-                feedback: "Magistral! O pensamento filosófico e a produção acadêmica exigem transitar da opinião espontânea (doxa) para o conhecimento justificado e metodologicamente estruturado (episteme)!"
-              },
-              {
-                text: "Adotar argumentos de autoridade incontestáveis sem análise metodológica dos dados.",
-                correct: false,
-                feedback: "Falácia de autoridade! A ciência e a filosofia não aceitam dogmas cegos: exigem consistência interna e comprovação reflexiva."
-              },
-              {
-                text: "Redigir o texto sem preocupação com normas de citação, assumindo senso comum como verdade.",
-                correct: false,
-                feedback: "Incorreto! Isso caracteriza plágio ou senso comum ingênuo, desprovido de rigor acadêmico e validade científica."
-              }
-            ]
+        lore: "O desenvolvimento acadêmico exige mais do que saber codificar: exige rigor argumentativo para não cair em dogmas infundados.",
+        question: "Na redação de um trabalho científico ou monografia, como diferenciar o conhecimento legítimo da mera opinião irrefletida?",
+        options: [
+          {
+            text: "Superando a doxa (opinião subjetiva) com método dialético, dados e fundamentação teórica.",
+            correct: true,
+            feedback: "Magistral! O rigor epistêmico distingue o senso comum ingênuo da verdade demonstrável, estruturando teses consistentes e livres de falácias."
+          },
+          {
+            text: "Aceitando qualquer afirmação sem checagem de premissas.",
+            correct: false,
+            feedback: "Isso é alienação! O pensamento filosófico questiona evidências aparentes e busca a raiz dos problemas."
+          },
+          {
+            text: "Copiar trechos de outros autores sem fazer citação ABNT.",
+            correct: false,
+            feedback: "Plágio acadêmico! Além de infração ética, anula o valor formativo da pesquisa autônoma."
           }
-        }
+        ]
       }
     ];
 
     // Jogador
     const player = {
-      x: 400,
-      y: 200,
-      speed: 4,
-      color: "#a855f7"
+      x: 200,
+      y: 115,
+      targetX: 200,
+      targetY: 115,
+      color: "#c084fc"
     };
 
-    const keys = {};
-    window.addEventListener("keydown", e => {
-      keys[e.key.toLowerCase()] = true;
-      if (e.key === " " || e.key === "Enter") triggerInteract();
-    });
-    window.addEventListener("keyup", e => { keys[e.key.toLowerCase()] = false; });
-
     /* =========================================================
-       2. PERSISTÊNCIA DE PROGRESSO LOCAL (SAVE STATE)
+       2. PERSISTÊNCIA LOCAL (SAVE GAME)
        ========================================================= */
-    const SAVE_KEY = "kernel_chronicles_amanda_save";
+    const SAVE_KEY = "kernel_rpg_mobile_save";
 
     function loadSave() {
       try {
@@ -618,213 +562,195 @@
       return { xp: 0, completed: [], relics: [] };
     }
 
-    let userProgress = loadSave();
+    let userSave = loadSave();
 
-    function persistProgress() {
-      localStorage.setItem(SAVE_KEY, JSON.stringify(userProgress));
-      updateDashboard();
+    function persist() {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(userSave));
+      updateUI();
     }
 
     /* =========================================================
-       3. GAME LOOP & RENDERIZAÇÃO CANVAS
+       3. GAME LOOP & TOUCH DIRETO NO MAPA
        ========================================================= */
-    function updateGame() {
-      if (keys["w"] || keys["arrowup"]) player.y = Math.max(20, player.y - player.speed);
-      if (keys["s"] || keys["arrowdown"]) player.y = Math.min(canvas.height - 20, player.y + player.speed);
-      if (keys["a"] || keys["arrowleft"]) player.x = Math.max(20, player.x - player.speed);
-      if (keys["d"] || keys["arrowright"]) player.x = Math.min(canvas.width - 20, player.x + player.speed);
+    canvas.addEventListener("pointerdown", e => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
 
-      // Detecta setor
-      let activeZone = "TERMINAL DE BOOT";
-      ZONES.forEach(z => {
-        if (player.x >= z.x && player.x <= z.x + z.w && player.y >= z.y && player.y <= z.y + z.h) {
-          activeZone = z.name.toUpperCase();
+      const clickX = (e.clientX - rect.left) * scaleX;
+      const clickY = (e.clientY - rect.top) * scaleY;
+
+      // Define novo destino do avatar
+      player.targetX = clickX;
+      player.targetY = clickY;
+
+      // Verifica se tocou dentro de um setor
+      SECTORS.forEach(sec => {
+        if (clickX >= sec.x && clickX <= sec.x + sec.w && clickY >= sec.y && clickY <= sec.y + sec.h) {
+          setTimeout(() => openSectorMission(sec), 350);
         }
       });
-      document.getElementById("hud-zone").innerText = `SETOR: ${activeZone}`;
+    });
+
+    function teleportTo(secId) {
+      const sec = SECTORS.find(s => s.id === secId);
+      if (!sec) return;
+      player.targetX = sec.x + sec.w / 2;
+      player.targetY = sec.y + sec.h / 2;
+      openSectorMission(sec);
     }
 
-    function drawGame() {
-      // Fundo Matriz do Kernel
+    function updatePhysics() {
+      // Movimento suave do avatar até o ponto de toque
+      player.x += (player.targetX - player.x) * 0.15;
+      player.y += (player.targetY - player.y) * 0.15;
+    }
+
+    function drawWorld() {
       ctx.fillStyle = "#030712";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Barramentos e trilhas de circuito
+      // Corredores centrais
       ctx.fillStyle = "#1e1b4b";
-      ctx.fillRect(0, 185, canvas.width, 30);
-      ctx.fillRect(385, 0, 30, canvas.height);
+      ctx.fillRect(0, 105, canvas.width, 20);
+      ctx.fillRect(190, 0, 20, canvas.height);
 
-      // Linhas de dados em neon suave
-      ctx.strokeStyle = "rgba(99, 102, 241, 0.25)";
-      ctx.lineWidth = 1;
-      for (let i = 0; i < canvas.width; i += 40) {
-        ctx.beginPath();
-        ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height);
-        ctx.stroke();
-      }
+      // Desenha os 4 Setores
+      SECTORS.forEach(sec => {
+        ctx.fillStyle = sec.color;
+        ctx.fillRect(sec.x, sec.y, sec.w, sec.h);
 
-      // Desenha as 4 Zonas Acadêmicas
-      ZONES.forEach(z => {
-        ctx.fillStyle = z.color;
-        ctx.fillRect(z.x, z.y, z.w, z.h);
+        const done = userSave.completed.includes(sec.id);
+        ctx.strokeStyle = done ? "#10b981" : "rgba(255,255,255,0.2)";
+        ctx.lineWidth = done ? 2 : 1;
+        ctx.strokeRect(sec.x, sec.y, sec.w, sec.h);
 
-        const isDone = userProgress.completed.includes(z.id);
-        ctx.strokeStyle = isDone ? "#10b981" : "rgba(255,255,255,0.25)";
-        ctx.lineWidth = isDone ? 3 : 1.5;
-        ctx.strokeRect(z.x, z.y, z.w, z.h);
+        // Nome do Setor
+        ctx.fillStyle = done ? "#10b981" : "#fff";
+        ctx.font = "7px 'Press Start 2P'";
+        ctx.fillText(sec.name.toUpperCase(), sec.x + 8, sec.y + 16);
 
-        // Título da Zona
-        ctx.fillStyle = isDone ? "#10b981" : "#fff";
-        ctx.font = "8px 'Press Start 2P'";
-        ctx.fillText(z.id.toUpperCase(), z.x + 8, z.y + 18);
-
-        // Ícone / Símbolo do Guardião
-        ctx.font = "24px serif";
-        ctx.fillText(z.npc.symbol, z.x + z.w/2 - 12, z.y + z.h/2 + 10);
+        // Ícone do Guardião
+        ctx.font = "20px serif";
+        ctx.fillText(sec.symbol, sec.x + sec.w/2 - 10, sec.y + sec.h/2 + 8);
       });
 
       // Desenha Amanda (Avatar em Pixel Art)
       ctx.fillStyle = player.color;
-      ctx.fillRect(player.x - 9, player.y - 9, 18, 18);
+      ctx.fillRect(player.x - 7, player.y - 7, 14, 14);
       ctx.fillStyle = "#fff";
-      ctx.fillRect(player.x - 5, player.y - 5, 3, 3);
-      ctx.fillRect(player.x + 2, player.y - 5, 3, 3);
-
-      // Indicador de interação próxima
-      const near = getNearbyZone();
-      if (near) {
-        ctx.strokeStyle = "#fbbf24";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(player.x, player.y, 24, 0, Math.PI * 2);
-        ctx.stroke();
-
-        ctx.fillStyle = "#fbbf24";
-        ctx.font = "8px 'Press Start 2P'";
-        ctx.fillText("[ESPAÇO]", player.x - 24, player.y - 18);
-      }
+      ctx.fillRect(player.x - 4, player.y - 4, 3, 3);
+      ctx.fillRect(player.x + 1, player.y - 4, 3, 3);
     }
 
     function gameLoop() {
-      updateGame();
-      drawGame();
+      updatePhysics();
+      drawWorld();
       requestAnimationFrame(gameLoop);
     }
 
     /* =========================================================
-       4. INTERAÇÃO E DESAFIOS PEDAGÓGICOS
+       4. INTERAÇÃO E MISSÕES (BOTTOM SHEET MOBILE)
        ========================================================= */
-    function getNearbyZone() {
-      return ZONES.find(z => {
-        const cx = z.x + z.w / 2;
-        const cy = z.y + z.h / 2;
-        return Math.hypot(player.x - cx, player.y - cy) < 85;
-      });
-    }
+    function openSectorMission(sec) {
+      document.getElementById("sheetNpc").innerText = `${sec.symbol} ${sec.npc}`;
+      document.getElementById("sheetTopic").innerText = sec.topic;
+      document.getElementById("sheetLore").innerText = sec.lore;
+      document.getElementById("sheetQuestion").innerText = sec.question;
 
-    function triggerInteract() {
-      const zone = getNearbyZone();
-      if (!zone) return;
+      const choicesBox = document.getElementById("sheetChoices");
+      choicesBox.innerHTML = "";
 
-      const modal = document.getElementById("dialogueBox");
-      document.getElementById("npcName").innerText = `${zone.npc.symbol} ${zone.npc.name}`;
-      document.getElementById("npcRole").innerText = zone.npc.role;
-      document.getElementById("npcLore").innerText = zone.npc.lore;
-
-      document.getElementById("challengeTitle").innerText = `DESAFIO: ${zone.npc.challenge.title.toUpperCase()}`;
-      document.getElementById("challengeDesc").innerText = zone.npc.challenge.desc;
-
-      const optsContainer = document.getElementById("challengeOpts");
-      optsContainer.innerHTML = "";
-
-      zone.npc.challenge.options.forEach((opt, idx) => {
-        const b = document.createElement("button");
-        b.className = "btn-choice";
-        b.innerHTML = `<strong>${String.fromCharCode(65 + idx)})</strong> ${opt.text}`;
-        b.onclick = () => solveChallenge(zone, opt);
-        optsContainer.appendChild(b);
+      sec.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "btn-option";
+        btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)})</strong> ${opt.text}`;
+        btn.onclick = () => answerChallenge(sec, opt);
+        choicesBox.appendChild(btn);
       });
 
-      document.getElementById("dialogueActions").innerHTML = `
-        <button class="btn-close" onclick="closeDialogue()">Suspender Interação</button>
+      document.getElementById("sheetActions").innerHTML = `
+        <button class="btn-sheet-close" onclick="closeSheet()">Fechar</button>
       `;
 
-      modal.classList.add("active");
+      document.getElementById("missionSheet").classList.add("active");
     }
 
-    function solveChallenge(zone, opt) {
-      const loreEl = document.getElementById("npcLore");
-      const boxEl = document.getElementById("challengeBox");
-      const actEl = document.getElementById("dialogueActions");
+    function answerChallenge(sec, opt) {
+      const loreEl = document.getElementById("sheetLore");
+      const boxEl = document.getElementById("sheetChallengeBox");
+      const actEl = document.getElementById("sheetActions");
 
       if (opt.correct) {
-        userProgress.xp += 150;
-        if (!userProgress.completed.includes(zone.id)) {
-          userProgress.completed.push(zone.id);
-          const r = RELIC_LIST[currentTheme];
-          if (!userProgress.relics.includes(r)) userProgress.relics.push(r);
+        userSave.xp += 150;
+        if (!userSave.completed.includes(sec.id)) {
+          userSave.completed.push(sec.id);
+          const rel = RELICS[currentTheme];
+          if (!userSave.relics.includes(rel)) userSave.relics.push(rel);
         }
 
-        loreEl.innerHTML = `🌟 <strong>CONCEITO ASSIMILADO COM SUCESSO!</strong><br>${opt.feedback}`;
+        loreEl.innerHTML = `🌟 <strong>SUCESSO!</strong><br>${opt.feedback}`;
         boxEl.innerHTML = `
-          <div style="color:var(--success); font-weight:700; font-size:14px; padding:10px 0;">
-            +150 XP! O setor foi desbloqueado e integrado ao seu mapa de conhecimento.
+          <div style="color:var(--success); font-weight:700; font-size:14px; padding:12px 0;">
+            +150 XP! O núcleo foi estabilizado com sucesso.
           </div>
         `;
       } else {
         loreEl.innerHTML = `⚠️ <strong>INCONSISTÊNCIA DETECTADA:</strong><br>${opt.feedback}`;
         boxEl.innerHTML = `
           <div style="color:var(--error); font-weight:600; font-size:13px; padding:10px 0;">
-            Revise a fundamentação do conceito e tente novamente para restabelecer o núcleo!
+            O conceito precisa de reforço. Tente novamente!
           </div>
         `;
       }
 
-      persistProgress();
+      persist();
 
       actEl.innerHTML = `
-        <button class="btn-action" onclick="closeDialogue()">Retomar Jornada ❯</button>
+        <button class="btn-bubble" style="color:#000; background:var(--accent); font-weight:700; padding:10px 16px;" onclick="closeSheet()">Continuar Jornada ❯</button>
       `;
     }
 
-    function closeDialogue() {
-      document.getElementById("dialogueBox").classList.remove("active");
-    }
-
-    function movePlayer(dx, dy) {
-      player.x = Math.max(20, Math.min(canvas.width - 20, player.x + dx));
-      player.y = Math.max(20, Math.min(canvas.height - 20, player.y + dy));
+    function closeSheet() {
+      document.getElementById("missionSheet").classList.remove("active");
     }
 
     /* =========================================================
-       5. SISTEMA DE RANK & TEMAS
+       5. SISTEMA DE TEMAS & UI
        ========================================================= */
-    function updateDashboard() {
-      document.getElementById("stat-xp").innerText = `${userProgress.xp} XP`;
-      document.getElementById("stat-missions").innerText = `${userProgress.completed.length} / ${ZONES.length} Núcleos`;
-      document.getElementById("stat-relics").innerText = userProgress.relics.length > 0 ? userProgress.relics.join(" • ") : "Nenhuma relíquia";
+    function updateUI() {
+      document.getElementById("ui-xp").innerText = `${userSave.xp} XP`;
+      document.getElementById("ui-relics").innerText = userSave.relics.length > 0 ? userSave.relics.join(" ") : "Nenhuma";
 
-      // Ranks baseados no domínio
-      const total = userProgress.completed.length;
-      let rank = "🌱 Nível 1: Compilador Iniciante";
-      if (total === 1) rank = "⚙️ Nível 2: Mestre das Funções";
-      else if (total === 2) rank = "🧠 Nível 3: Alquimista de Memória";
-      else if (total >= 3) rank = "👑 Nível 4: Guardiã do Kernel";
+      const total = userSave.completed.length;
+      let rank = "🌱 NÍVEL 1: COMPILADOR";
+      if (total === 1) rank = "⚙️ NÍVEL 2: MESTRE FUNÇÕES";
+      else if (total === 2) rank = "🧠 NÍVEL 3: ALQUIMISTA HEAP";
+      else if (total >= 3) rank = "👑 NÍVEL 4: GUARDIÃ KERNEL";
 
-      document.getElementById("stat-rank").innerText = rank;
+      document.getElementById("ui-rank").innerText = rank;
+
+      // Atualiza visual dos cards de setor
+      SECTORS.forEach(sec => {
+        const el = document.getElementById(`btn-sec-${sec.id}`);
+        if (el) {
+          if (userSave.completed.includes(sec.id)) el.classList.add("done");
+          else el.classList.remove("done");
+        }
+      });
     }
 
     function setTheme(th, e) {
       currentTheme = th;
       document.body.setAttribute("data-theme", th);
-      document.querySelectorAll(".btn-theme").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".btn-bubble").forEach(b => b.classList.remove("active"));
       if (e) e.target.classList.add("active");
       player.color = getComputedStyle(document.body).getPropertyValue("--accent").trim();
     }
 
     window.addEventListener("DOMContentLoaded", () => {
       setTheme("bts");
-      updateDashboard();
+      updateUI();
       gameLoop();
     });
   </script>
