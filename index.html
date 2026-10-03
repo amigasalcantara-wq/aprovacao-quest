@@ -6,7 +6,7 @@
   <title>QuestEdital Arcade - UFBA TI</title>
   <!-- Supabase JS Client via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Fontes: Press Start 2P para títulos e Inter para leitura ergonômica -->
+  <!-- Tipografia Confortável (Inter) e Retrô (Press Start 2P) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
       --font-display: 'Press Start 2P', monospace;
       --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-      /* BTS - Borahae Suave */
+      /* BTS - Borahae */
       --bg-color: #0e091b;
       --panel-bg: #171126;
       --panel-border: #4d2b7c;
@@ -538,18 +538,18 @@
     <header>
       <div class="game-logo">⚡ QUEST_EDITAL // UFBA TI</div>
       <div class="theme-picker">
-        <button class="btn-theme active" onclick="setTheme('bts')">BTS</button>
-        <button class="btn-theme" onclick="setTheme('untamed')">Untamed</button>
-        <button class="btn-theme" onclick="setTheme('ghibli')">Ghibli</button>
-        <button class="btn-theme" onclick="setTheme('coraline')">Coraline</button>
+        <button class="btn-theme active" onclick="setTheme('bts', event)">BTS</button>
+        <button class="btn-theme" onclick="setTheme('untamed', event)">Untamed</button>
+        <button class="btn-theme" onclick="setTheme('ghibli', event)">Ghibli</button>
+        <button class="btn-theme" onclick="setTheme('coraline', event)">Coraline</button>
       </div>
     </header>
 
     <!-- BATALHA DOMÉSTICA ONLINE (SUPABASE REALTIME) -->
     <div class="battlefield-card">
       <div class="battle-header">
-        <div class="battle-title">🧹 GUERRA DOS CÔMODOS (AO VIVO NO SUPABASE)</div>
-        <div class="sync-badge" id="sync-status">🟢 SINCRONIZADO</div>
+        <div class="battle-title">🧹 GUERRA DOS CÔMODOS (DISPUTA SEMANAL)</div>
+        <div class="sync-badge" id="sync-status">🟡 CONECTANDO...</div>
       </div>
 
       <div class="duel-scores">
@@ -570,7 +570,7 @@
 
       <div class="forfeit-box">
         <div id="forfeit-status" style="font-size:14px; line-height:1.5;">
-          <strong>STATUS:</strong> A carregar dados da nuvem...
+          <strong>STATUS:</strong> Preparando a disputa semanal...
         </div>
         <div>
           <span style="font-size:12px; color:var(--warn); margin-right:6px; font-weight:600;">CÔMODO:</span>
@@ -591,14 +591,14 @@
         <div class="slot-avatar">👑</div>
         <div class="slot-info">
           <h4>Amanda</h4>
-          <p id="stats-amanda">A carregar...</p>
+          <p id="stats-amanda">Nível 1 • 0 XP</p>
         </div>
       </div>
       <div class="slot-card" id="slot-aymara" onclick="switchUser('aymara')">
         <div class="slot-avatar">🌙</div>
         <div class="slot-info">
           <h4>Aymara</h4>
-          <p id="stats-aymara">A carregar...</p>
+          <p id="stats-aymara">Nível 1 • 0 XP</p>
         </div>
       </div>
       <div class="slot-card" id="slot-teste" onclick="switchUser('teste')">
@@ -612,11 +612,11 @@
 
     <!-- MODOS DE TREINO -->
     <div class="game-modes">
-      <button class="btn-mode active" id="mode-all" onclick="setMode('all')">TODAS</button>
-      <button class="btn-mode" id="mode-medium" onclick="setMode('medium')">MÉDIO</button>
-      <button class="btn-mode" id="mode-hard" onclick="setMode('hard')">DIFÍCIL</button>
-      <button class="btn-mode" id="mode-trap" onclick="setMode('trap')">⚠️ PEGADINHAS</button>
-      <button class="btn-mode" id="mode-refine" onclick="setMode('refine')">🎯 REFINAMENTO</button>
+      <button class="btn-mode active" id="mode-all" onclick="setMode('all', event)">TODAS</button>
+      <button class="btn-mode" id="mode-medium" onclick="setMode('medium', event)">MÉDIO</button>
+      <button class="btn-mode" id="mode-hard" onclick="setMode('hard', event)">DIFÍCIL</button>
+      <button class="btn-mode" id="mode-trap" onclick="setMode('trap', event)">⚠️️ PEGADINHAS</button>
+      <button class="btn-mode" id="mode-refine" onclick="setMode('refine', event)">🎯 REFINAMENTO</button>
     </div>
 
     <!-- CABINE DO QUIZ -->
@@ -630,7 +630,7 @@
       </div>
 
       <div>
-        <div class="question-topic" id="q-category">A CARREGAR...</div>
+        <div class="question-topic" id="q-category">CARREGANDO QUESTÃO...</div>
         <div class="question-title" id="q-statement">Aguarde o carregamento do enunciado...</div>
       </div>
 
@@ -643,7 +643,7 @@
         <div id="explanation-text" style="font-size:14px; line-height:1.6; color:#e5e7eb;"></div>
       </div>
 
-      <!-- BOTÕES DE NAVEGAÇÃO (ANTERIOR E PRÓXIMA) -->
+      <!-- BOTÕES DE NAVEGAÇÃO -->
       <div class="nav-buttons">
         <button class="btn-secondary" onclick="prevQuestion()">❮ ANTERIOR</button>
         <button class="btn-action" onclick="nextQuestion()">PRÓXIMA ❯</button>
@@ -675,33 +675,31 @@
 
   <script>
     /* =========================================================
-       CONFIGURAÇÃO OFICIAL DO SUPABASE COM SUAS CHAVES
+       CONFIGURAÇÃO DO SUPABASE
        ========================================================= */
     const SUPABASE_URL = "https://wdbzfymjjlojeewsyfyk.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_0rllOtrm9Tx8d-dRbIeGbg_tGiZmTo2";
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let supabaseClient = null;
+    try {
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.warn("Supabase não carregado, usando modo offline local.", e);
+    }
 
-    /* BANCO DE DADOS CORINGA (UFBA TI / BANCA AVALIA) */
+    /* =========================================================
+       BANCO DE QUESTÕES PRÉ-DEFINIDO (EDITAL UFBA 2026 - TI)
+       ========================================================= */
     const EDITAL_DATABASE = {
       topicos_sintese: {
-        "Lei 8.112/90": `⚡ RESUMO: LEI 8.112/90
-- Posse: 30 dias (improrrogável) contados da nomeação.
-- Exercício: 15 dias contados da posse.
-- Demissão: Penalidade punitiva resultante de falta grave apurada em PAD.
-- Exoneração: Desligamento sem caráter punitivo (a pedido ou reprovação no estágio probatório).`,
-        "Portas Lógicas": `⚡ PORTAS LÓGICAS & ÁLGEBRA BOOLEANA
-- AND: Saída 1 apenas se TODAS as entradas forem 1.
-- OR: Saída 1 se PELO MENOS UMA entrada for 1.
-- XOR (OU Exclusivo): Saída 1 se as entradas forem DIFERENTES (0 e 1). Entradas iguais geram 0.
-- Base Hexadecimal: Cada dígito hexa agrupa 4 bits binários (Ex: D = 1101, 6 = 0110).`,
-        "Licitações (Lei 14.133/21)": `⚡ NOVA LEI DE LICITAÇÕES (14.133/2021)
-- Inexigibilidade: Competição impossível (fornecedor exclusivo, notória especialização de natureza intelectual).
-- Dispensa: A competição seria viável, mas a lei autoriza não licitar (pequeno valor, emergência).`,
-        "Língua Portuguesa": `⚡ CRASE FACULTATIVA (Mnemônico: 'Até a sua Maria')
-- Após a preposição 'até'.
-- Diante de pronome possessivo feminino singular (minha, sua, tua).
-- Diante de nome próprio feminino.`
+        "Lei 8.112/90": `⚡ RESUMO: LEI 8.112/90\n- Posse: 30 dias (improrrogável) contados da nomeação.\n- Exercício: 15 dias contados da posse.\n- Demissão: Penalidade punitiva por falta grave apurada em PAD.\n- Exoneração: Desligamento sem caráter punitivo (a pedido ou reprovação no estágio probatório).`,
+        "Portas Lógicas": `⚡ PORTAS LÓGICAS & ÁLGEBRA BOOLEANA\n- AND: Saída 1 apenas se TODAS as entradas forem 1.\n- OR: Saída 1 se PELO MENOS UMA entrada for 1.\n- XOR (OU Exclusivo): Saída 1 se as entradas forem DIFERENTES (0 e 1). Entradas iguais geram 0.\n- Base Hexadecimal: Cada dígito hexa equivale a 4 bits binários (Ex: D = 1101, 6 = 0110).`,
+        "Licitações (Lei 14.133/21)": `⚡ NOVA LEI DE LICITAÇÕES (14.133/2021)\n- Inexigibilidade: Competição impossível (fornecedor exclusivo, notória especialização de natureza intelectual).\n- Dispensa: A competição seria viável, mas a lei autoriza não licitar (pequeno valor, emergência).`,
+        "Redes de Computadores": `⚡ REDES & PROTOCOLOS\n- Camada de Transporte: TCP (conexão confiável, orientada a fluxo) vs UDP (rápido, sem garantia de entrega).\n- Portas Padrão: DNS (53), HTTP (80), HTTPS (443), SSH (22), DHCP (67/68).\n- Máscara /24: Fornece 256 endereços (254 úteis para hosts).`,
+        "Sistemas Operacionais": `⚡ SISTEMAS OPERACIONAIS\n- Permissões Linux: r=4, w=2, x=1. O comando chmod 755 concede rwx ao dono e rx ao grupo e outros.\n- Gerenciamento de Processos: Preempção permite ao SO interromper um processo para conceder CPU a outro.`,
+        "Língua Portuguesa": `⚡ CRASE FACULTATIVA (Mnemônico: 'Até a sua Maria')\n- Após a preposição 'até'.\n- Diante de pronome possessivo feminino singular (minha, sua, tua).\n- Diante de nome próprio feminino.`
       },
       questoes: [
         {
@@ -735,6 +733,42 @@
           explanation: "A inviabilidade de competição decorrente de serviço técnico especializado com profissional de notória especialização configura caso de INEXIGIBILIDADE (Art. 74, III da Lei 14.133/21)."
         },
         {
+          topic: "Redes de Computadores",
+          difficulty: "medium",
+          isTrap: false,
+          isRefine: false,
+          statement: "Na arquitetura TCP/IP, qual protocolo da camada de transporte opera sem garantia de entrega e sem confirmação de recebimento (handshake prévio), priorizando velocidade de transmissão?",
+          options: ["TCP", "UDP", "ICMP", "IP", "ARP"],
+          correct: 1,
+          explanation: "O UDP (User Datagram Protocol) é não orientado à conexão e não garante a integridade ou a ordem dos pacotes, priorizando menor latência."
+        },
+        {
+          topic: "Sistemas Operacionais",
+          difficulty: "hard",
+          isTrap: false,
+          isRefine: true,
+          statement: "No sistema operacional Linux, ao aplicar o comando 'chmod 754 script.sh', quais permissões são concedidas, respectivamente, ao proprietário, ao grupo e aos outros usuários?",
+          options: [
+            "rwx (leitura, escrita, execução), r-x (leitura, execução) e r-- (leitura apenas).",
+            "rwx (leitura, escrita, execução), rw- (leitura, escrita) e r-- (leitura apenas).",
+            "rw- (leitura, escrita), rwx (leitura, escrita, execução) e --x (execução apenas).",
+            "rwx (leitura, escrita, execução), r-- (leitura apenas) e r-x (leitura, execução).",
+            "r-x (leitura, execução), rw- (leitura, escrita) e --- (sem acesso)."
+          ],
+          correct: 0,
+          explanation: "No octal de permissões: 7 = 4+2+1 (rwx para o dono); 5 = 4+1 (r-x para o grupo); 4 = 4 (r-- para outros)."
+        },
+        {
+          topic: "Portas Lógicas",
+          difficulty: "hard",
+          isTrap: true,
+          isRefine: true,
+          statement: "O número binário (11010110)₂ convertido para o sistema hexadecimal (base 16) resulta exatamente em:",
+          options: ["C6₁₆", "E4₁₆", "D6₁₆", "B6₁₆", "A4₁₆"],
+          correct: 2,
+          explanation: "Dividindo o número em quartetos de bits: 1101 = 13 (letra D em hexa) e 0110 = 6 em decimal/hexa. Portanto, D6₁₆."
+        },
+        {
           topic: "Língua Portuguesa",
           difficulty: "medium",
           isTrap: true,
@@ -748,18 +782,36 @@
             "Os técnicos trabalharam às pressas durante a pane."
           ],
           correct: 1,
-          explanation: "Depois da preposição 'até', o uso da crase é facultativo ('até a orla' ou 'até à orla'). Diante de palavras masculinas ('à prazo') o uso é incorreto."
+          explanation: "Depois da preposição 'até', o emprego da crase é facultativo ('até a orla' ou 'até à orla'). Diante de palavras masculinas ('à prazo') o uso é incorreto."
         }
       ]
     };
 
-    /* ESTADO LOCAL & DISPOSITIVO */
+    /* =========================================================
+       ESTADO LOCAL & SINCRONIZAÇÃO
+       ========================================================= */
+    const LOCAL_KEY = "quest_edital_local_backup";
+
+    function loadLocal() {
+      try {
+        const item = localStorage.getItem(LOCAL_KEY);
+        if (item) return JSON.parse(item);
+      } catch (e) {}
+      return {
+        amanda: { xp: 0, streak: 0, weekly_right: 0, total_answered: 0, mistakes: {} },
+        aymara: { xp: 0, streak: 0, weekly_right: 0, total_answered: 0, mistakes: {} },
+        teste:  { xp: 0, streak: 0, weekly_right: 0, total_answered: 0, mistakes: {} },
+        room: "Cozinha e Louças"
+      };
+    }
+
+    let localState = loadLocal();
     let cloudData = {
-      amanda: { xp: 0, streak: 0, weekly_right: 0, total_answered: 0, mistakes: {} },
-      aymara: { xp: 0, streak: 0, weekly_right: 0, total_answered: 0, mistakes: {} },
-      teste:  { xp: 0, streak: 0, weekly_right: 0, total_answered: 0, mistakes: {} }
+      amanda: localState.amanda,
+      aymara: localState.aymara,
+      teste: localState.teste
     };
-    let currentRoom = "Cozinha e Louças";
+    let currentRoom = localState.room || "Cozinha e Louças";
 
     let currentUser = "amanda";
     let currentMode = "all";
@@ -767,96 +819,119 @@
     let currentDeck = [];
 
     // Sintetizador de Áudio (Suave)
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let audioCtx = null;
     function playBeep(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      const t = audioCtx.currentTime;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const t = audioCtx.currentTime;
 
-      if (type === 'correct') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523, t);
-        osc.frequency.setValueAtTime(659, t + 0.08);
-        gain.gain.setValueAtTime(0.08, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
-        osc.start(t);
-        osc.stop(t + 0.25);
-      } else if (type === 'error') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(220, t);
-        osc.frequency.setValueAtTime(160, t + 0.1);
-        gain.gain.setValueAtTime(0.08, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-        osc.start(t);
-        osc.stop(t + 0.2);
-      } else {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, t);
-        gain.gain.setValueAtTime(0.03, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
-        osc.start(t);
-        osc.stop(t + 0.05);
-      }
+        if (type === 'correct') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523, t);
+          osc.frequency.setValueAtTime(659, t + 0.08);
+          gain.gain.setValueAtTime(0.08, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+          osc.start(t);
+          osc.stop(t + 0.25);
+        } else if (type === 'error') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(220, t);
+          osc.frequency.setValueAtTime(160, t + 0.1);
+          gain.gain.setValueAtTime(0.08, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+          osc.start(t);
+          osc.stop(t + 0.2);
+        } else {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, t);
+          gain.gain.setValueAtTime(0.03, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+          osc.start(t);
+          osc.stop(t + 0.05);
+        }
+      } catch (e) {}
     }
 
-    /* CARREGAMENTO E SINCRONIZAÇÃO SUPABASE */
+    /* CARREGAMENTO SUPABASE */
     async function loadCloudState() {
+      if (!supabaseClient) {
+        document.getElementById('sync-status').innerText = "🟢 MODO OFFLINE (LOCAL)";
+        return;
+      }
+
       try {
-        const { data, error } = await supabase.from('game_state').select('*');
+        const { data, error } = await supabaseClient.from('game_state').select('*');
         if (error) throw error;
 
-        data.forEach(row => {
-          cloudData[row.user_id] = {
-            xp: row.xp || 0,
-            streak: row.streak || 0,
-            weekly_right: row.weekly_right || 0,
-            total_answered: row.total_answered || 0,
-            mistakes: row.mistakes || {}
-          };
-          if (row.room_target) currentRoom = row.room_target;
-        });
-
+        if (data && data.length > 0) {
+          data.forEach(row => {
+            if (cloudData[row.user_id]) {
+              cloudData[row.user_id] = {
+                xp: row.xp || 0,
+                streak: row.streak || 0,
+                weekly_right: row.weekly_right || 0,
+                total_answered: row.total_answered || 0,
+                mistakes: row.mistakes || {}
+              };
+            }
+            if (row.room_target) currentRoom = row.room_target;
+          });
+          document.getElementById('sync-status').innerText = "🟢 SUPABASE ONLINE";
+        }
         renderHUD();
         renderBattleboard();
       } catch (err) {
-        console.warn("Supabase em modo offline/fallback:", err);
-        document.getElementById('sync-status').innerText = "🟡 MODO LOCAL";
+        console.warn("Falha no Supabase. Mantendo dados locais:", err);
+        document.getElementById('sync-status').innerText = "🟡 MODO LOCAL ATIVO";
       }
     }
 
     function subscribeRealtime() {
-      supabase
-        .channel('game_state_sync')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'game_state' }, payload => {
-          const row = payload.new;
-          if (row && row.user_id) {
-            cloudData[row.user_id] = {
-              xp: row.xp,
-              streak: row.streak,
-              weekly_right: row.weekly_right,
-              total_answered: row.total_answered,
-              mistakes: row.mistakes || {}
-            };
-            if (row.room_target) currentRoom = row.room_target;
+      if (!supabaseClient) return;
 
-            const badge = document.getElementById('sync-status');
-            badge.innerText = "⚡ ATUALIZADO!";
-            setTimeout(() => badge.innerText = "🟢 SINCRONIZADO", 1500);
+      try {
+        supabaseClient
+          .channel('game_state_sync')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'game_state' }, payload => {
+            const row = payload.new;
+            if (row && row.user_id && cloudData[row.user_id]) {
+              cloudData[row.user_id] = {
+                xp: row.xp,
+                streak: row.streak,
+                weekly_right: row.weekly_right,
+                total_answered: row.total_answered,
+                mistakes: row.mistakes || {}
+              };
+              if (row.room_target) currentRoom = row.room_target;
 
-            renderHUD();
-            renderBattleboard();
-          }
-        })
-        .subscribe();
+              const badge = document.getElementById('sync-status');
+              badge.innerText = "⚡ ATUALIZADO!";
+              setTimeout(() => badge.innerText = "🟢 SUPABASE ONLINE", 1500);
+
+              renderHUD();
+              renderBattleboard();
+            }
+          })
+          .subscribe();
+      } catch (e) {}
     }
 
     async function pushUserUpdate() {
       const u = cloudData[currentUser];
+      // Salva localmente primeiro
       try {
-        await supabase.from('game_state').upsert({
+        localStorage.setItem(LOCAL_KEY, JSON.stringify({ ...cloudData, room: currentRoom }));
+      } catch (e) {}
+
+      if (!supabaseClient) return;
+
+      try {
+        await supabaseClient.from('game_state').upsert({
           user_id: currentUser,
           xp: u.xp,
           streak: u.streak,
@@ -867,42 +942,46 @@
           updated_at: new Date().toISOString()
         });
       } catch (err) {
-        console.error("Falha ao salvar no Supabase:", err);
+        console.warn("Erro ao salvar na nuvem:", err);
       }
     }
 
     async function syncRoom(roomName) {
       currentRoom = roomName;
       try {
-        await supabase.from('game_state').update({ room_target: roomName }).neq('user_id', '');
-      } catch (err) {
-        console.error(err);
+        localStorage.setItem(LOCAL_KEY, JSON.stringify({ ...cloudData, room: currentRoom }));
+      } catch (e) {}
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('game_state').update({ room_target: roomName }).neq('user_id', '');
+        } catch (err) {}
       }
       renderBattleboard();
     }
 
-    /* NAVEGAÇÃO & QUIZ */
-    function setTheme(th) {
+    /* CONTROLE DE TEMAS & NAVEGAÇÃO */
+    function setTheme(th, evt) {
       playBeep('click');
       document.body.setAttribute('data-theme', th);
       document.querySelectorAll('.btn-theme').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+      if (evt && evt.target) evt.target.classList.add('active');
     }
 
     function switchUser(uid) {
       playBeep('click');
       currentUser = uid;
       document.querySelectorAll('.slot-card').forEach(s => s.classList.remove('active'));
-      document.getElementById(`slot-${uid}`).classList.add('active');
+      const activeSlot = document.getElementById(`slot-${uid}`);
+      if (activeSlot) activeSlot.classList.add('active');
       renderHUD();
-      filterDeck();
     }
 
-    function setMode(mode) {
+    function setMode(mode, evt) {
       playBeep('click');
       currentMode = mode;
       document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
-      document.getElementById(`mode-${mode}`).classList.add('active');
+      if (evt && evt.target) evt.target.classList.add('active');
       filterDeck();
     }
 
@@ -913,13 +992,18 @@
       else if (currentMode === 'trap') currentDeck = EDITAL_DATABASE.questoes.filter(q => q.isTrap);
       else if (currentMode === 'refine') currentDeck = EDITAL_DATABASE.questoes.filter(q => q.isRefine);
 
+      if (currentDeck.length === 0) currentDeck = [...EDITAL_DATABASE.questoes];
+
       activeIndex = 0;
       loadCard();
     }
 
     function loadCard() {
-      document.getElementById('explanation-card').classList.remove('active');
+      const expCard = document.getElementById('explanation-card');
+      if (expCard) expCard.classList.remove('active');
+
       const q = currentDeck[activeIndex];
+      if (!q) return;
 
       document.getElementById('q-category').innerText = `QUESTÃO ${activeIndex + 1} DE ${currentDeck.length} • DISCIPLINA: ${q.topic}`;
       document.getElementById('q-statement').innerText = q.statement;
@@ -982,13 +1066,14 @@
 
     function renderHUD() {
       const u = cloudData[currentUser];
-      document.getElementById('hud-streak').innerText = u.streak;
-      document.getElementById('hud-xp').innerText = u.xp;
+      document.getElementById('hud-streak').innerText = u.streak || 0;
+      document.getElementById('hud-xp').innerText = u.xp || 0;
 
       ['amanda', 'aymara', 'teste'].forEach(id => {
         const prof = cloudData[id];
         const lvl = Math.floor((prof.xp || 0) / 300) + 1;
-        document.getElementById(`stats-${id}`).innerText = `Nível ${lvl} • ${prof.xp || 0} XP`;
+        const statsEl = document.getElementById(`stats-${id}`);
+        if (statsEl) statsEl.innerText = `Nível ${lvl} • ${prof.xp || 0} XP`;
       });
 
       renderWeaknesses();
@@ -1032,6 +1117,7 @@
     function renderWeaknesses() {
       const u = cloudData[currentUser];
       const list = document.getElementById('weakness-list');
+      if (!list) return;
       list.innerHTML = "";
 
       Object.keys(EDITAL_DATABASE.topicos_sintese).forEach(top => {
@@ -1059,11 +1145,17 @@
       document.getElementById('modal-synth').classList.remove('open');
     }
 
-    window.onload = async () => {
+    /* INICIALIZAÇÃO IMEDIATA SEM ESPERAR A REDE */
+    window.addEventListener('DOMContentLoaded', () => {
       filterDeck();
-      await loadCloudState();
-      subscribeRealtime();
-    };
+      renderHUD();
+      renderBattleboard();
+
+      // Conexão e sincronização em segundo plano
+      loadCloudState().then(() => {
+        subscribeRealtime();
+      });
+    });
   </script>
 </body>
 </html>
