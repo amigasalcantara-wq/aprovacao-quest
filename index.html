@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QuestEdital Arcade - UFBA Assistente em Administração</title>
-  <!-- Supabase Client CDN -->
+  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Fontes Ergonômicas -->
+  <!-- Fontes Confortáveis e Títulos Arcade -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -16,56 +16,60 @@
       --font-display: 'Press Start 2P', monospace;
       --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-      /* BTS - Padrão */
-      --bg-color: #0c0817;
-      --panel-bg: #150f24;
-      --panel-border: #4d2b7c;
-      --accent: #b784f0;
-      --accent-glow: rgba(183, 132, 240, 0.25);
-      --text: #f1ecf7;
-      --text-muted: #a69bb8;
+      /* TEMA: BTS (Borahae Neon) */
+      --bg-color: #0b0716;
+      --panel-bg: #150d28;
+      --panel-border: #5a2898;
+      --accent: #c084fc;
+      --accent-glow: rgba(192, 132, 252, 0.3);
+      --text: #f3e8ff;
+      --text-muted: #a894c2;
       --success: #10b981;
       --error: #f43f5e;
-      --warn: #f59e0b;
+      --warn: #fbbf24;
+      --mascot-color: #c084fc;
     }
 
     body[data-theme="untamed"] {
-      --bg-color: #120909;
-      --panel-bg: #1c1010;
-      --panel-border: #6d2020;
+      --bg-color: #0e0505;
+      --panel-bg: #1a0a0a;
+      --panel-border: #7f1d1d;
       --accent: #f87171;
-      --accent-glow: rgba(248, 113, 113, 0.25);
-      --text: #f7eded;
-      --text-muted: #bda3a3;
+      --accent-glow: rgba(248, 113, 113, 0.3);
+      --text: #fee2e2;
+      --text-muted: #b99393;
       --success: #10b981;
       --error: #ef4444;
       --warn: #f59e0b;
+      --mascot-color: #ef4444;
     }
 
     body[data-theme="ghibli"] {
-      --bg-color: #0b140f;
-      --panel-bg: #13221a;
-      --panel-border: #23533b;
+      --bg-color: #06120b;
+      --panel-bg: #0c2015;
+      --panel-border: #166534;
       --accent: #4ade80;
-      --accent-glow: rgba(74, 222, 128, 0.25);
-      --text: #ecfdf5;
-      --text-muted: #95b3a2;
+      --accent-glow: rgba(74, 222, 128, 0.3);
+      --text: #dcfce7;
+      --text-muted: #86a894;
       --success: #06b6d4;
       --error: #f43f5e;
-      --warn: #fbbf24;
+      --warn: #f59e0b;
+      --mascot-color: #fbbf24;
     }
 
     body[data-theme="coraline"] {
-      --bg-color: #0c0f1d;
-      --panel-bg: #151a30;
-      --panel-border: #323d6b;
-      --accent: #ec4899;
-      --accent-glow: rgba(236, 72, 153, 0.25);
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
+      --bg-color: #070a14;
+      --panel-bg: #0f1629;
+      --panel-border: #312e81;
+      --accent: #f472b6;
+      --accent-glow: rgba(244, 114, 182, 0.3);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
       --success: #38bdf8;
-      --error: #ec4899;
+      --error: #f43f5e;
       --warn: #fbbf24;
+      --mascot-color: #f472b6;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -81,47 +85,61 @@
       padding: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.4s ease, color 0.4s ease;
     }
 
     .container { width: 100%; max-width: 900px; }
 
+    /* HEADER */
     header {
       background: var(--panel-bg);
       border: 2px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 14px 18px;
+      border-radius: 10px;
+      padding: 12px 18px;
       margin-bottom: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
+      box-shadow: 0 4px 14px var(--accent-glow);
     }
 
-    .game-logo { font-family: var(--font-display); font-size: 10px; color: var(--accent); }
+    .game-logo {
+      font-family: var(--font-display);
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+    }
+
     .theme-picker { display: flex; gap: 6px; }
 
     .btn-theme {
       background: transparent;
       border: 1px solid var(--panel-border);
-      border-radius: 4px;
+      border-radius: 6px;
       color: var(--text-muted);
       font-size: 11px;
-      padding: 5px 9px;
+      padding: 6px 10px;
       cursor: pointer;
       font-weight: 600;
+      transition: all 0.2s;
     }
 
-    .btn-theme.active, .btn-theme:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+    .btn-theme.active, .btn-theme:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
 
-    /* CALENDÁRIO & BATALHA SEMANAL */
+    /* PLACAR SEMANAL E BATALHA DE CÔMODOS */
     .battlefield-card {
       background: var(--panel-bg);
       border: 2px solid var(--warn);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 16px;
       margin-bottom: 14px;
+      position: relative;
     }
 
     .battle-header {
@@ -140,7 +158,7 @@
       color: var(--warn);
       padding: 4px 8px;
       border-radius: 4px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .duel-scores {
@@ -148,29 +166,36 @@
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 14px;
-      margin: 12px 0;
+      margin: 10px 0;
     }
 
     .duelist-box {
       background: rgba(0,0,0,0.3);
       border: 2px solid var(--panel-border);
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 12px;
       text-align: center;
       transition: all 0.3s;
     }
 
-    .duelist-box.winning { border-color: var(--success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
-    .duelist-box.losing { border-color: var(--error); box-shadow: 0 0 10px rgba(244, 63, 94, 0.2); }
+    .duelist-box.winning {
+      border-color: var(--success);
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+    }
+
+    .duelist-box.losing {
+      border-color: var(--error);
+      box-shadow: 0 0 14px rgba(244, 63, 94, 0.25);
+    }
 
     .duelist-name { font-family: var(--font-display); font-size: 10px; margin-bottom: 4px; }
-    .duelist-points { font-family: var(--font-display); font-size: 16px; color: var(--accent); margin: 6px 0; }
-    .relic-shelf { display: flex; justify-content: center; gap: 4px; font-size: 14px; min-height: 22px; margin-top: 4px; }
+    .duelist-points { font-family: var(--font-display); font-size: 18px; color: var(--accent); margin: 6px 0; }
+    .relic-shelf { display: flex; justify-content: center; gap: 6px; font-size: 15px; min-height: 24px; margin-top: 4px; }
 
     .forfeit-box {
       background: rgba(0,0,0,0.4);
       border: 1px dashed var(--error);
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 12px;
       display: flex;
       flex-wrap: wrap;
@@ -183,16 +208,17 @@
       background: #000;
       color: #fff;
       border: 1px solid var(--warn);
-      border-radius: 4px;
-      padding: 5px 8px;
-      font-size: 12px;
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 13px;
+      font-family: var(--font-body);
     }
 
-    /* PERFIS */
+    /* SELEÇÃO DE JOGADOR LOCAL */
     .profile-bar {
       background: var(--panel-bg);
       border: 2px solid var(--panel-border);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 10px;
       margin-bottom: 14px;
       display: grid;
@@ -202,13 +228,14 @@
 
     .slot-card {
       border: 1px dashed var(--panel-border);
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 8px 12px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 10px;
       background: rgba(0,0,0,0.2);
+      transition: all 0.2s;
     }
 
     .slot-card.active { border: 2px solid var(--accent); background: var(--accent-glow); }
@@ -217,7 +244,7 @@
     .filter-zone {
       background: var(--panel-bg);
       border: 2px solid var(--panel-border);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 12px;
       margin-bottom: 14px;
     }
@@ -226,106 +253,147 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-bottom: 8px;
     }
 
     .tab-btn, .mode-btn {
       background: rgba(0,0,0,0.3);
       border: 1px solid var(--panel-border);
-      border-radius: 4px;
+      border-radius: 6px;
       color: var(--text-muted);
       font-size: 11px;
       font-weight: 600;
-      padding: 6px 10px;
+      padding: 7px 11px;
       cursor: pointer;
+      transition: all 0.2s;
     }
 
     .tab-btn.active, .tab-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
     .mode-btn.active, .mode-btn:hover { background: var(--warn); color: #000; border-color: var(--warn); }
 
-    /* CABINE DO QUIZ */
+    /* CABINE DO QUIZ COM MASCOTE ILUSTRADO */
     .arcade-cabinet {
       background: var(--panel-bg);
       border: 2px solid var(--panel-border);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 22px;
       margin-bottom: 16px;
+      position: relative;
     }
 
-    .hud-bar {
+    .cabinet-top {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 8px;
-      margin-bottom: 14px;
-      font-size: 12px;
-      color: var(--text-muted);
+      padding-bottom: 10px;
     }
 
-    .question-title { font-size: 16px; font-weight: 500; line-height: 1.6; color: #fff; margin-bottom: 18px; }
+    .mascot-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--panel-border);
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .mascot-svg-wrap {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .mascot-svg-wrap.happy {
+      transform: scale(1.25) rotate(10deg);
+    }
+
+    .mascot-svg-wrap.thinking {
+      transform: scale(0.9) rotate(-10deg);
+    }
+
+    .mascot-speech {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      max-width: 260px;
+      line-height: 1.3;
+    }
+
+    .question-title {
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: #fff;
+      margin: 14px 0 18px 0;
+    }
+
     .options-grid { display: flex; flex-direction: column; gap: 10px; }
 
     .option-btn {
       background: rgba(0,0,0,0.25);
       border: 1.5px solid var(--panel-border);
-      border-radius: 6px;
+      border-radius: 8px;
       color: var(--text);
       font-family: var(--font-body);
-      font-size: 14px;
-      padding: 12px 14px;
+      font-size: 15px;
+      padding: 13px 16px;
       text-align: left;
       cursor: pointer;
       display: flex;
-      gap: 10px;
+      gap: 12px;
       line-height: 1.5;
+      transition: all 0.15s;
     }
 
-    .option-btn:hover:not(:disabled) { border-color: var(--accent); transform: translateX(3px); }
+    .option-btn:hover:not(:disabled) { border-color: var(--accent); transform: translateX(4px); }
     .option-btn.correct { border-color: var(--success) !important; background: rgba(16, 185, 129, 0.15) !important; color: #fff !important; }
     .option-btn.incorrect { border-color: var(--error) !important; background: rgba(244, 63, 94, 0.15) !important; color: #fff !important; }
 
     .opt-letter {
       background: rgba(255,255,255,0.06);
-      border-radius: 3px;
-      padding: 1px 6px;
-      font-size: 11px;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--accent);
       flex-shrink: 0;
     }
 
-    /* FLASHCARD DE FIXAÇÃO IMEDIATA */
+    /* FEEDBACK DE FIXAÇÃO */
     .flashcard-note {
       display: none;
-      background: rgba(245, 158, 11, 0.1);
+      background: rgba(245, 158, 11, 0.12);
       border: 1px solid var(--warn);
-      border-radius: 6px;
-      padding: 12px;
+      border-radius: 8px;
+      padding: 14px;
       margin-top: 14px;
-      font-size: 13px;
+      font-size: 14px;
       color: #fed7aa;
     }
-
     .flashcard-note.active { display: block; }
 
     .explanation-card {
       display: none;
       background: rgba(0,0,0,0.4);
       border-left: 4px solid var(--accent);
-      border-radius: 0 6px 6px 0;
+      border-radius: 0 8px 8px 0;
       padding: 14px;
       margin-top: 14px;
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.6;
     }
-
     .explanation-card.active { display: block; }
 
     .nav-buttons {
       display: flex;
       justify-content: space-between;
       margin-top: 18px;
-      padding-top: 12px;
+      padding-top: 14px;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
@@ -333,10 +401,10 @@
       background: var(--accent);
       color: #000;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       font-size: 12px;
       font-weight: 700;
-      padding: 8px 14px;
+      padding: 10px 16px;
       cursor: pointer;
     }
 
@@ -344,10 +412,32 @@
       background: transparent;
       color: var(--text-muted);
       border: 1px solid var(--panel-border);
-      border-radius: 4px;
+      border-radius: 6px;
       font-size: 12px;
-      padding: 8px 14px;
+      padding: 10px 16px;
       cursor: pointer;
+    }
+
+    /* MÓDULO APRENDER EM PARTES */
+    .diagnosis-cabinet {
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .weakness-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .weakness-card {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 12px;
     }
 
     /* MODAL */
@@ -356,21 +446,21 @@
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(4px);
       z-index: 100;
       justify-content: center;
       align-items: center;
       padding: 16px;
     }
-
     .modal-overlay.open { display: flex; }
 
     .modal-content {
       background: var(--panel-bg);
       border: 2px solid var(--warn);
-      border-radius: 8px;
-      max-width: 600px;
+      border-radius: 10px;
+      max-width: 620px;
       width: 100%;
-      padding: 20px;
+      padding: 22px;
       max-height: 85vh;
       overflow-y: auto;
     }
@@ -382,10 +472,10 @@
     <header>
       <div class="game-logo">⚡ UFBA // ASSISTENTE EM ADMINISTRAÇÃO</div>
       <div class="theme-picker">
-        <button class="btn-theme active" onclick="setTheme('bts', event)">BTS</button>
-        <button class="btn-theme" onclick="setTheme('untamed', event)">Untamed</button>
-        <button class="btn-theme" onclick="setTheme('ghibli', event)">Ghibli</button>
-        <button class="btn-theme" onclick="setTheme('coraline', event)">Coraline</button>
+        <button class="btn-theme active" onclick="setTheme('bts', event)">💜 BTS</button>
+        <button class="btn-theme" onclick="setTheme('untamed', event)">🏮 Untamed</button>
+        <button class="btn-theme" onclick="setTheme('ghibli', event)">🌿 Ghibli</button>
+        <button class="btn-theme" onclick="setTheme('coraline', event)">🗝️ Coraline</button>
       </div>
     </header>
 
@@ -395,7 +485,7 @@
         <div style="font-family:var(--font-display); font-size:10px; color:var(--warn);">
           🏆 DUELO DE RELÍQUIAS & CÔMODOS
         </div>
-        <div class="calendar-badge" id="calendar-info">SEMANA ATIVA</div>
+        <div class="calendar-badge" id="calendar-info">RODADA ATIVA</div>
       </div>
 
       <div class="duel-scores">
@@ -403,7 +493,7 @@
           <div class="duelist-name">👑 AMANDA</div>
           <div class="duelist-points" id="pts-amanda">0</div>
           <div style="font-size:11px; color:var(--text-muted);" id="sub-amanda">0 acertos</div>
-          <div class="relic-shelf" id="relics-amanda" title="Relíquias Desbloqueadas"></div>
+          <div class="relic-shelf" id="relics-amanda"></div>
         </div>
 
         <div style="font-family:var(--font-display); font-size:12px; color:var(--warn);">VS</div>
@@ -412,16 +502,16 @@
           <div class="duelist-name">🌙 AYMARA</div>
           <div class="duelist-points" id="pts-aymara">0</div>
           <div style="font-size:11px; color:var(--text-muted);" id="sub-aymara">0 acertos</div>
-          <div class="relic-shelf" id="relics-aymara" title="Relíquias Desbloqueadas"></div>
+          <div class="relic-shelf" id="relics-aymara"></div>
         </div>
       </div>
 
       <div class="forfeit-box">
         <div id="forfeit-status" style="font-size:13px;">
-          Quem tiver mais acertos até domingo ganha a <strong>Relíquia da Semana</strong> e escapa do cômodo!
+          Quem fizer mais pontos até domingo ganha a <strong>Relíquia da Semana</strong> e escapa da faxina!
         </div>
         <div>
-          <span style="font-size:11px; color:var(--warn); margin-right:4px;">CÔMODO:</span>
+          <span style="font-size:11px; color:var(--warn); margin-right:4px; font-weight:600;">CÔMODO:</span>
           <select class="room-select" id="room-target" onchange="syncRoom(this.value)">
             <option value="Cozinha e Louças">🍳 Cozinha & Louças</option>
             <option value="Banheiro Principal">🧼 Banheiro Principal</option>
@@ -458,11 +548,11 @@
       </div>
     </div>
 
-    <!-- FILTRO COMBINADO: MATÉRIA & REPETIÇÃO ESPAÇADA -->
+    <!-- FILTROS DE MATÉRIAS E MODOS -->
     <div class="filter-zone">
       <div style="font-size:11px; color:var(--text-muted); font-weight:700; margin-bottom:6px;">DISCIPLINA:</div>
       <div class="subject-tabs">
-        <button class="tab-btn active" onclick="setSubject('all', event)">📚 Todas</button>
+        <button class="tab-btn active" onclick="setSubject('all', event)">📚 Todas as Matérias</button>
         <button class="tab-btn" onclick="setSubject('Língua Portuguesa', event)">📖 Língua Portuguesa</button>
         <button class="tab-btn" onclick="setSubject('Noções de Informática', event)">💻 Noções de Informática</button>
         <button class="tab-btn" onclick="setSubject('Administração Pública', event)">⚖️ Administração Pública</button>
@@ -474,21 +564,30 @@
         <button class="mode-btn active" onclick="setMode('all', event)">Normal</button>
         <button class="mode-btn" onclick="setMode('mistakes', event)">🔁 Minhas Dificuldades</button>
         <button class="mode-btn" onclick="setMode('trap', event)">⚠ Só Pegadinhas</button>
-        <button class="mode-btn" onclick="setMode('hard', event)">🔥 Difíceis</button>
+        <button class="mode-btn" onclick="setMode('hard', event)">🔥 Questões Difíceis</button>
       </div>
     </div>
 
-    <!-- CABINE DO QUIZ -->
+    <!-- CABINE DO QUIZ COM MASCOTE DINÂMICO -->
     <div class="arcade-cabinet">
-      <div class="hud-bar">
-        <span id="q-category">CARREGANDO...</span>
-        <span>Combo: <strong id="hud-streak" style="color:var(--success);">0</strong> | XP: <strong id="hud-xp" style="color:var(--accent);">0</strong></span>
+      <div class="cabinet-top">
+        <div class="mascot-display">
+          <div class="mascot-svg-wrap" id="mascot-avatar"></div>
+          <div class="mascot-speech" id="mascot-msg">Pronta para acertar mais uma?</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px; color:var(--text-muted);" id="q-category">CARREGANDO...</div>
+          <div style="font-size:12px; margin-top:2px;">
+            Combo: <strong id="hud-streak" style="color:var(--success);">0</strong> | 
+            XP: <strong id="hud-xp" style="color:var(--accent);">0</strong>
+          </div>
+        </div>
       </div>
 
       <div class="question-title" id="q-statement">Aguarde o carregamento do enunciado...</div>
       <div class="options-grid" id="options-container"></div>
 
-      <!-- FIXAÇÃO IMEDIATA (FLASHCARD) -->
+      <!-- FLASHCARD DE FIXAÇÃO IMEDIATA -->
       <div class="flashcard-note" id="flashcard-box">
         <strong>💡 NOTA MENTAL DE FIXAÇÃO:</strong>
         <div id="flashcard-text" style="margin-top:4px;"></div>
@@ -504,6 +603,17 @@
         <button class="btn-secondary" onclick="prevQuestion()">❮ ANTERIOR</button>
         <button class="btn-action" onclick="nextQuestion()">PRÓXIMA ❯</button>
       </div>
+    </div>
+
+    <!-- MÓDULO APRENDER EM PARTES -->
+    <div class="diagnosis-cabinet">
+      <div style="font-family:var(--font-display); font-size:10px; color:var(--warn); margin-bottom:6px;">
+        📖 DIAGNÓSTICO: APRENDER EM PARTES
+      </div>
+      <p style="font-size:13px; color:var(--text-muted);">
+        Micro-resumos diretos para fixação de regras e eliminação de pegadinhas do Instituto Avalia.
+      </p>
+      <div class="weakness-list" id="weakness-list"></div>
     </div>
   </div>
 
@@ -528,7 +638,34 @@
       if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     } catch(e) {}
 
-    /* TABELA DE RELÍQUIAS POR TEMA */
+    /* ILUSTRAÇÕES VETORIAIS LIVRES DE DIREITOS (SVG NATIVO) */
+    const MASCOTS = {
+      bts: {
+        idle: `<svg viewBox="0 0 100 100" width="40" height="40"><path d="M50 82 C20 55, 10 35, 25 18 C38 3, 50 25, 50 25 C50 25, 62 3, 75 18 C90 35, 80 55, 50 82 Z" fill="#c084fc"/><circle cx="50" cy="40" r="8" fill="#ffffff" opacity="0.8"/></svg>`,
+        msgIdle: "Foque nos seus sonhos! Borahae! 💜",
+        msgHappy: "Incrível! Ponto de ouro garantido! ✨",
+        msgThinking: "Não desanime! Respire e grave a regra mental. 💭"
+      },
+      untamed: {
+        idle: `<svg viewBox="0 0 100 100" width="40" height="40"><line x1="20" y1="80" x2="80" y2="20" stroke="#1c1917" stroke-width="8" stroke-linecap="round"/><circle cx="45" cy="55" r="3" fill="#ef4444"/><circle cx="55" cy="45" r="3" fill="#ef4444"/><path d="M20 80 Q10 90, 15 95 Q25 90, 20 80" fill="#ef4444"/></svg>`,
+        msgIdle: "Cultive sua disciplina como o Patriarca! 🏮",
+        msgHappy: "Golpe magistral! Questão dominada!",
+        msgThinking: "Revise a lei com calma como em Gusu Lan."
+      },
+      ghibli: {
+        idle: `<svg viewBox="0 0 100 100" width="40" height="40"><path d="M50 15 C35 30, 20 50, 25 72 C30 92, 70 92, 75 72 C80 50, 65 30, 50 15 Z" fill="#f59e0b"/><circle cx="40" cy="55" r="5" fill="#000"/><circle cx="60" cy="55" r="5" fill="#000"/><ellipse cx="50" cy="70" rx="8" ry="4" fill="#ef4444"/></svg>`,
+        msgIdle: "Mantenha a chama da curiosidade acesa! 🔥",
+        msgHappy: "Calcifer está radiante com o acerto! ✨",
+        msgThinking: "Errar faz parte da jornada mágica!"
+      },
+      coraline: {
+        idle: `<svg viewBox="0 0 100 100" width="40" height="40"><circle cx="40" cy="50" r="22" fill="#312e81" stroke="#f472b6" stroke-width="4"/><circle cx="33" cy="43" r="3" fill="#fff"/><circle cx="47" cy="43" r="3" fill="#fff"/><circle cx="33" cy="57" r="3" fill="#fff"/><circle cx="47" cy="57" r="3" fill="#fff"/><line x1="62" y1="50" x2="90" y2="50" stroke="#f472b6" stroke-width="6"/><line x1="80" y1="50" x2="80" y2="62" stroke="#f472b6" stroke-width="5"/></svg>`,
+        msgIdle: "Desvende as ilusões e pegadinhas da banca! 🗝️",
+        msgHappy: "A chave secreta abriu mais um ponto! 🚪",
+        msgThinking: "Cuidado com o botão... leia com mais atenção!"
+      }
+    };
+
     const RELICS_REWARD = {
       bts: { icon: "💜", name: "Microfone Imperial Borahae" },
       untamed: { icon: "🏮", name: "Flauta Chenqing do Patriarca" },
@@ -536,104 +673,118 @@
       coraline: { icon: "🗝️", name: "Chave de Olho Furado" }
     };
 
-    /* BANCO DE QUESTÕES COM PONTO DE FIXAÇÃO */
+    /* BANCO DE DADOS: UFBA CARGO 201 (ASSISTENTE EM ADMINISTRAÇÃO) */
     const EDITAL_DATABASE = {
+      topicos_sintese: {
+        "Lei 8.112/90": `⚡ REGIME JURÍDICO ÚNICO (LEI 8.112/90)\n- Posse: 30 dias improrrogáveis após nomeação.\n- Exercício: 15 dias contados da posse.\n- Demissão é sanção disciplinar punitiva; Exoneração não tem caráter punitivo.`,
+        "Nova Lei de Licitações": `⚡ LEI 14.133/2021\n- Inexigibilidade: Competição impossível (fornecedor exclusivo, profissional de notória especialização).\n- Dispensa: Competição viável, mas a lei autoriza não licitar (pequeno valor, emergência).`,
+        "Arquivologia": `⚡ TEORIA DAS TRÊS IDADES (ARQUIVOLOGIA)\n- 1ª Idade (Corrente): Documentos em uso frequente, guardados junto aos setores geradores.\n- 2ª Idade (Intermediário): Uso eventual, aguardando prazo de guarda ou destinação final.\n- 3ª Idade (Permanente/Histórico): Valor probatório/cultural, NUNCA podem ser eliminados!`,
+        "Administração de Materiais": `⚡ ADMINISTRAÇÃO DE MATERIAIS & ESTOQUES\n- Curva ABC: Classe A (poucos itens, alto valor financeiro, controle rigoroso); Classe C (muitos itens, baixo valor financeiro).\n- Inventário Rotativo: Realizado continuamente ao longo do ano vs. Inventário Geral/Anual.`,
+        "Noções de Informática": `⚡ INFORMÁTICA & SEGURANÇA\n- Phishing: Engenharia social que induz a vítima a fornecer senhas e dados bancários.\n- Ransomware: Malware que sequestra e criptografa arquivos exigindo resgate.\n- Backup Incremental: Salva apenas os dados alterados desde o último backup completo ou incremental.`,
+        "Língua Portuguesa": `⚡ CRASE FACULTATIVA (Mnemônico: 'Até a sua Maria')\n- Após a preposição 'até'.\n- Diante de pronome possessivo feminino singular (minha, sua, tua).\n- Diante de nome próprio feminino.`
+      },
       questoes: [
         {
           id: 1,
           subject: "Língua Portuguesa",
+          topic: "Língua Portuguesa",
           difficulty: "medium",
           isTrap: true,
-          statement: "Assinale a alternativa em que a ocorrência do acento grave indicativo de crase é rigorosamente FACULTATIVA:",
+          statement: "Em conformidade com a norma-padrão da Língua Portuguesa, assinale a opção na qual o uso do sinal indicativo de crase é estritamente FACULTATIVO:",
           options: [
-            "Os assistentes compareceram à assembleia geral.",
-            "Caminhamos até à recepção da reitoria.",
-            "O diretor solicitou relatórios à prazo.",
-            "O ofício foi entregue à Vossa Magnificência.",
-            "O servidor agiu às pressas durante o atendimento."
+            "Os assistentes compareceram à assembleia geral da universidade.",
+            "Caminhamos até à recepção da reitoria após o encerramento.",
+            "O diretor solicitou a compra de materiais à prazo.",
+            "O memorando formal foi entregue à Vossa Senhoria.",
+            "O servidor agiu às pressas durante o atendimento ao público."
           ],
           correct: 1,
-          fixation: "Regra de Ouro: A crase é facultativa após 'ATÉ', diante de NOME PRÓPRIO FEMININO e antes de POSSESSIVO FEMININO (sua/minha/tua). Diante de palavras masculinas ou pronomes de tratamento, é proibida!",
+          fixation: "Regra de Ouro: Crase é facultativa após 'ATÉ', diante de NOME PRÓPRIO FEMININO e antes de POSSESSIVO FEMININO (sua/minha). Diante de palavras masculinas ou pronomes de tratamento, é proibida!",
           explanation: "Após a preposição 'até', o emprego da crase é facultativo ('até a recepção' ou 'até à recepção'). Diante de palavras masculinas ('à prazo') é incorreto."
         },
         {
           id: 2,
           subject: "Noções de Informática",
+          topic: "Noções de Informática",
           difficulty: "medium",
           isTrap: false,
-          statement: "Qual tipo de código malicioso sequestra dados por meio de criptografia forte e exige pagamento financeiro (resgate) para restabelecer o acesso do usuário?",
+          statement: "Qual tipo de código malicioso sequestra dados por meio de criptografia e exige pagamento financeiro (resgate) para restabelecer o acesso do usuário aos arquivos?",
           options: ["Worm", "Ransomware", "Spyware", "Adware", "Rootkit"],
           correct: 1,
-          fixation: "Ransom = Resgate. O Ransomware bloqueia e cifra seus arquivos exigindo resgate (geralmente criptomoedas).",
-          explanation: "Ransomware é a praga virtual que cifra pastas e volumes de dados, impedindo o acesso legítimo e exigindo transferências para disponibilizar a chave de descriptografia."
+          fixation: "Ransom = Resgate. O Ransomware cifra e bloqueia os arquivos exigindo pagamento.",
+          explanation: "Ransomware é a praga virtual que cifra arquivos e pastas, impedindo o acesso do usuário e exigindo resgate para fornecer a chave de descriptografia."
         },
         {
           id: 3,
           subject: "Administração Pública",
+          topic: "Lei 8.112/90",
           difficulty: "medium",
           isTrap: false,
-          statement: "Conforme o regime disciplinar da Lei Federal nº 8.112/1990, são penalidades disciplinares expressamente cominadas, EXCETO:",
+          statement: "Conforme o regime disciplinar previsto na Lei Federal nº 8.112/1990, são penalidades disciplinares expressamente cominadas, EXCETO:",
           options: ["Advertência.", "Suspensão.", "Demissão.", "Exoneração.", "Destituição de cargo em comissão."],
           correct: 3,
-          fixation: "Exoneração NÃO É penalidade! Demissão é punição grave de expulsão do cargo; Exoneração é mero encerramento do vínculo (a pedido ou reprovação em estágio).",
-          explanation: "Art. 127 da Lei nº 8.112/90: São penalidades: advertência, suspensão, demissão, cassação de aposentadoria/disponibilidade e destituição. Exoneração não integra o rol punitivo."
+          fixation: "Exoneração NÃO É penalidade! Demissão é punição de expulsão por falta grave; Exoneração é mero desligamento formal a pedido ou por reprovação no estágio.",
+          explanation: "Art. 127 da Lei nº 8.112/90: São penalidades disciplinares: advertência, suspensão, demissão, cassação de aposentadoria/disponibilidade e destituição. Exoneração não é penalidade."
         },
         {
           id: 4,
           subject: "Conhecimentos Específicos",
+          topic: "Nova Lei de Licitações",
           difficulty: "hard",
           isTrap: true,
           statement: "Na Lei nº 14.133/2021, a inviabilidade de competição para contratação de profissional de notória especialização de serviço intelectual caracteriza hipótese de:",
           options: [
-            "Dispensa de licitação.",
+            "Dispensa de licitação em razão do valor.",
             "Inexigibilidade de licitação.",
             "Pregão presencial simplificado.",
-            "Concurso com dispensa.",
-            "Alienação fiduciária."
+            "Concurso com dispensa prévia.",
+            "Alienação fiduciária de serviço."
           ],
           correct: 1,
-          fixation: "Competição inviável/impossível = INEXIGIBILIDADE. Competição viável, mas dispensada por conveniência da lei = DISPENSA.",
-          explanation: "Art. 74 da Lei 14.133/21: É inexigível a licitação quando inviável a competição, notadamente em serviços técnicos especializados com profissional consagrado ou notório."
+          fixation: "Competição inviável/impossível = INEXIGIBILIDADE. Competição viável, mas autorizada a não licitar = DISPENSA.",
+          explanation: "Art. 74 da Lei 14.133/21: É inexigível a licitação quando inviável a competição, expressamente prevista para serviços técnicos especializados de natureza intelectual com notória especialização."
         },
         {
           id: 5,
           subject: "Conhecimentos Específicos",
+          topic: "Arquivologia",
           difficulty: "medium",
           isTrap: false,
           statement: "Na gestão documental arquivística (Teoria das Três Idades), os documentos de valor permanente:",
           options: [
-            "Podem ser eliminados após 30 anos de arquivamento.",
-            "São guardados junto ao setor de protocolo ativo.",
+            "Podem ser eliminados após 30 anos de guarda no arquivo.",
+            "Ficam obrigatoriamente alocados no setor de protocolo de entrada.",
             "São inalienáveis, imprescritíveis e nunca podem ser eliminados.",
-            "Devem ser expurgados após microfilmagem simples.",
-            "Pertencem exclusivamente à fase corrente."
+            "Devem ser expurgados compulsoriamente após microfilmagem.",
+            "Pertencem exclusivamente à fase corrente de tramitação."
           ],
           correct: 2,
-          fixation: "Arquivo Permanente (3ª Idade) tem valor histórico/cultural definitivo: NUNCA se joga fora, não prescreve e não se vende!",
-          explanation: "Art. 10 da Lei nº 8.159/91: Os documentos de valor permanente são inalienáveis e imprescritíveis, ficando sob guarda definitiva por representarem patrimônio histórico."
+          fixation: "Arquivo Permanente (3ª Idade) tem valor histórico e probatório definitivo: NUNCA se joga fora e não prescreve!",
+          explanation: "Art. 10 da Lei nº 8.159/91: Os documentos de valor permanente são inalienáveis e imprescritíveis, ficando sob custódia definitiva por seu valor cultural e probatório."
         },
         {
           id: 6,
           subject: "Conhecimentos Específicos",
+          topic: "Administração de Materiais",
           difficulty: "hard",
           isTrap: true,
-          statement: "Na administração de materiais, a classificação ABC permite identificar a prioridade dos estoques. Sobre os itens da Classe A, é correto afirmar:",
+          statement: "Na administração de materiais e estoques, a classificação ABC permite identificar a criticidade dos itens. Sobre os itens da Classe A, é correto afirmar que:",
           options: [
-            "Representam o maior número físico de itens e o menor custo.",
+            "Representam o maior número físico de itens e o menor custo total.",
             "Correspondem a pequena quantidade de itens que concentram a maior parte do investimento financeiro.",
-            "São itens descartáveis e isentos de controle anual.",
-            "Possuem demanda altamente instável e baixo valor unitário.",
-            "São adquiridos exclusivamente por pregão presencial."
+            "São itens descartáveis e isentos de controle patrimonial anual.",
+            "Possuem demanda altamente instável e baixo valor unitário de aquisição.",
+            "Devem ser inventariados apenas uma vez a cada dez anos."
           ],
           correct: 1,
-          fixation: "Classe A = Alta relevância financeira, pouca quantidade física. Classe C = Grande volume de peças, valor monetário baixo.",
-          explanation: "Na análise de Pareto (Curva ABC), a Classe A representa cerca de 20% do volume físico estocado, mas responde por aproximadamente 80% do valor monetário acumulado."
+          fixation: "Classe A = Alto valor financeiro acumulado (~80%), pouca quantidade física (~20%). Classe C = Muitas peças, baixo valor.",
+          explanation: "Pelo Princípio de Pareto (Curva ABC), a Classe A reúne cerca de 20% do volume físico estocado, mas responde por aproximadamente 80% do valor monetário acumulado do estoque."
         }
       ]
     };
 
-    /* ESTADO & PERSISTÊNCIA */
-    const LOCAL_KEY = "quest_edital_assistente_v3";
+    /* ESTADO & PERSISTÊNCIA LOCAL */
+    const LOCAL_KEY = "quest_edital_assistente_v4";
     let activeTheme = "bts";
 
     function getWeekId() {
@@ -714,12 +865,32 @@
       renderBattle();
     }
 
-    /* CONTROLES DO JOGO */
+    /* CONTROLE DO MASCOTE E TEMAS */
+    function updateMascot(state) {
+      const avatarEl = document.getElementById('mascot-avatar');
+      const msgEl = document.getElementById('mascot-msg');
+      const m = MASCOTS[activeTheme];
+
+      avatarEl.innerHTML = m.idle;
+      avatarEl.className = 'mascot-svg-wrap';
+
+      if (state === 'happy') {
+        avatarEl.classList.add('happy');
+        msgEl.innerText = m.msgHappy;
+      } else if (state === 'thinking') {
+        avatarEl.classList.add('thinking');
+        msgEl.innerText = m.msgThinking;
+      } else {
+        msgEl.innerText = m.msgIdle;
+      }
+    }
+
     function setTheme(th, e) {
       activeTheme = th;
       document.body.setAttribute('data-theme', th);
       document.querySelectorAll('.btn-theme').forEach(b => b.classList.remove('active'));
       if (e && e.target) e.target.classList.add('active');
+      updateMascot('idle');
     }
 
     function switchUser(u) {
@@ -765,6 +936,7 @@
     function loadCard() {
       document.getElementById('explanation-card').classList.remove('active');
       document.getElementById('flashcard-box').classList.remove('active');
+      updateMascot('idle');
 
       const q = currentDeck[activeIndex];
       if (!q) return;
@@ -795,23 +967,23 @@
       buttons[idx].classList.add(isRight ? 'correct' : 'incorrect');
 
       if (isRight) {
+        updateMascot('happy');
         u.streak = (u.streak || 0) + 1;
         u.weekly_right = (u.weekly_right || 0) + 1;
         u.xp = (u.xp || 0) + 50 + (u.streak * 10);
-        // Remove do caderno de erros se acertar
         u.mistakes = (u.mistakes || []).filter(id => id !== q.id);
 
-        // Se atingir marco de 5 acertos na semana, ganha a relíquia do tema ativo
+        // Desbloqueia relíquia a cada 5 acertos semanais
         if (u.weekly_right % 5 === 0) {
           const r = RELICS_REWARD[activeTheme];
           if (!u.relics.includes(r.icon)) u.relics.push(r.icon);
         }
       } else {
+        updateMascot('thinking');
         buttons[q.correct].classList.add('correct');
         u.streak = 0;
         if (!u.mistakes.includes(q.id)) u.mistakes.push(q.id);
 
-        // Dispara Flashcard de Fixação
         document.getElementById('flashcard-text').innerText = q.fixation;
         document.getElementById('flashcard-box').classList.add('active');
       }
@@ -845,6 +1017,8 @@
         const el = document.getElementById(`stats-${id}`);
         if (el) el.innerText = `Nível ${lvl} • ${p.xp || 0} XP`;
       });
+
+      renderWeaknesses();
     }
 
     function renderBattle() {
@@ -882,7 +1056,34 @@
       }
     }
 
+    function renderWeaknesses() {
+      const list = document.getElementById('weakness-list');
+      if (!list) return;
+      list.innerHTML = "";
+
+      Object.keys(EDITAL_DATABASE.topicos_sintese).forEach(top => {
+        const card = document.createElement('div');
+        card.className = 'weakness-card';
+        card.innerHTML = `
+          <h5 style="font-size:13px; font-weight:600; color:#fff; margin-bottom:4px;">${top}</h5>
+          <button class="btn-action" style="font-size:11px; padding:6px 10px;" onclick="openSynth('${top}')">📖 APRENDER EM PARTES</button>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function openSynth(top) {
+      document.getElementById('modal-title').innerText = `⚡ SÍNTESE DIRECIONADA: ${top.toUpperCase()}`;
+      document.getElementById('modal-body').innerText = EDITAL_DATABASE.topicos_sintese[top];
+      document.getElementById('modal-synth').classList.add('open');
+    }
+
+    function closeSynthModal() {
+      document.getElementById('modal-synth').classList.remove('open');
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      updateMascot('idle');
       filterDeck();
       renderHUD();
       renderBattle();
