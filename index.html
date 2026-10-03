@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuestEdital Arcade - UFBA TI</title>
-  <!-- Supabase JS Client via CDN -->
+  <title>QuestEdital Arcade - UFBA Assistente em Administração</title>
+  <!-- Supabase Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Tipografia Confortável (Inter) e Retrô (Press Start 2P) -->
+  <!-- Fontes Ergonômicas -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -16,9 +16,9 @@
       --font-display: 'Press Start 2P', monospace;
       --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-      /* BTS - Borahae */
-      --bg-color: #0e091b;
-      --panel-bg: #171126;
+      /* BTS - Padrão */
+      --bg-color: #0c0817;
+      --panel-bg: #150f24;
       --panel-border: #4d2b7c;
       --accent: #b784f0;
       --accent-glow: rgba(183, 132, 240, 0.25);
@@ -84,19 +84,14 @@
       transition: background-color 0.3s ease;
     }
 
-    .container {
-      width: 100%;
-      max-width: 900px;
-      position: relative;
-    }
+    .container { width: 100%; max-width: 900px; }
 
-    /* HEADER */
     header {
       background: var(--panel-bg);
       border: 2px solid var(--panel-border);
       border-radius: 8px;
       padding: 14px 18px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -104,45 +99,29 @@
       gap: 10px;
     }
 
-    .game-logo {
-      font-family: var(--font-display);
-      font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 0.5px;
-    }
-
-    .theme-picker {
-      display: flex;
-      gap: 6px;
-    }
+    .game-logo { font-family: var(--font-display); font-size: 10px; color: var(--accent); }
+    .theme-picker { display: flex; gap: 6px; }
 
     .btn-theme {
       background: transparent;
       border: 1px solid var(--panel-border);
       border-radius: 4px;
       color: var(--text-muted);
-      font-family: var(--font-body);
-      font-size: 12px;
-      padding: 5px 10px;
+      font-size: 11px;
+      padding: 5px 9px;
       cursor: pointer;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-
-    .btn-theme.active, .btn-theme:hover {
-      background: var(--accent);
-      color: #000;
       font-weight: 600;
-      border-color: var(--accent);
     }
 
-    /* BATALHA DOMÉSTICA */
+    .btn-theme.active, .btn-theme:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+
+    /* CALENDÁRIO & BATALHA SEMANAL */
     .battlefield-card {
       background: var(--panel-bg);
       border: 2px solid var(--warn);
       border-radius: 8px;
-      padding: 18px;
-      margin-bottom: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
     }
 
     .battle-header {
@@ -150,21 +129,15 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 10px;
-      margin-bottom: 14px;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
     }
 
-    .battle-title {
-      font-family: var(--font-display);
-      font-size: 10px;
-      color: var(--warn);
-    }
-
-    .sync-badge {
+    .calendar-badge {
       font-size: 11px;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid var(--success);
-      color: var(--success);
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--warn);
+      color: var(--warn);
       padding: 4px 8px;
       border-radius: 4px;
       font-weight: 600;
@@ -174,58 +147,36 @@
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 16px;
-      margin: 14px 0;
+      gap: 14px;
+      margin: 12px 0;
     }
 
     .duelist-box {
       background: rgba(0,0,0,0.3);
       border: 2px solid var(--panel-border);
       border-radius: 6px;
-      padding: 14px;
+      padding: 12px;
       text-align: center;
       transition: all 0.3s;
     }
 
-    .duelist-box.winning {
-      border-color: var(--success);
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
-    }
+    .duelist-box.winning { border-color: var(--success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+    .duelist-box.losing { border-color: var(--error); box-shadow: 0 0 10px rgba(244, 63, 94, 0.2); }
 
-    .duelist-box.losing {
-      border-color: var(--error);
-      box-shadow: 0 0 12px rgba(244, 63, 94, 0.2);
-    }
-
-    .duelist-name {
-      font-family: var(--font-display);
-      font-size: 10px;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-
-    .duelist-points {
-      font-family: var(--font-display);
-      font-size: 16px;
-      color: var(--accent);
-      margin: 8px 0;
-    }
-
-    .duelist-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
+    .duelist-name { font-family: var(--font-display); font-size: 10px; margin-bottom: 4px; }
+    .duelist-points { font-family: var(--font-display); font-size: 16px; color: var(--accent); margin: 6px 0; }
+    .relic-shelf { display: flex; justify-content: center; gap: 4px; font-size: 14px; min-height: 22px; margin-top: 4px; }
 
     .forfeit-box {
       background: rgba(0,0,0,0.4);
       border: 1px dashed var(--error);
       border-radius: 6px;
-      padding: 12px 16px;
+      padding: 12px;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     select.room-select {
@@ -233,137 +184,86 @@
       color: #fff;
       border: 1px solid var(--warn);
       border-radius: 4px;
-      padding: 6px 10px;
-      font-size: 13px;
-      font-family: var(--font-body);
+      padding: 5px 8px;
+      font-size: 12px;
     }
 
-    /* SELEÇÃO DO JOGADOR LOCAL */
+    /* PERFIS */
     .profile-bar {
       background: var(--panel-bg);
       border: 2px solid var(--panel-border);
       border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 16px;
+      padding: 10px;
+      margin-bottom: 14px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px;
     }
 
     .slot-card {
       border: 1px dashed var(--panel-border);
       border-radius: 6px;
-      padding: 10px;
+      padding: 8px 12px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       background: rgba(0,0,0,0.2);
-      transition: all 0.2s;
     }
 
-    .slot-card.active {
-      border: 2px solid var(--accent);
-      background: var(--accent-glow);
-    }
+    .slot-card.active { border: 2px solid var(--accent); background: var(--accent-glow); }
 
-    .slot-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 6px;
-      background: #000;
-      border: 1px solid var(--accent);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 18px;
-    }
-
-    .slot-info h4 {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .slot-info p {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    /* MODOS DE TREINO */
-    .game-modes {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .btn-mode {
+    /* FILTROS DE MATÉRIAS E MODOS */
+    .filter-zone {
       background: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 6px;
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 10px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
+      border: 2px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 14px;
     }
 
-    .btn-mode.active, .btn-mode:hover {
-      border-color: var(--accent);
-      background: var(--accent);
-      color: #000;
+    .subject-tabs, .mode-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
     }
+
+    .tab-btn, .mode-btn {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--panel-border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .tab-btn.active, .tab-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+    .mode-btn.active, .mode-btn:hover { background: var(--warn); color: #000; border-color: var(--warn); }
 
     /* CABINE DO QUIZ */
     .arcade-cabinet {
       background: var(--panel-bg);
       border: 2px solid var(--panel-border);
       border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 18px;
+      padding: 22px;
+      margin-bottom: 16px;
     }
 
     .hud-bar {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 10px;
-      margin-bottom: 16px;
-      font-size: 13px;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      font-size: 12px;
       color: var(--text-muted);
     }
 
-    .hud-tag {
-      font-family: var(--font-display);
-      font-size: 9px;
-      color: var(--warn);
-    }
-
-    .question-topic {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
-    }
-
-    .question-title {
-      font-size: 17px;
-      font-weight: 500;
-      line-height: 1.6;
-      color: #ffffff;
-      margin-bottom: 20px;
-    }
-
-    .options-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .question-title { font-size: 16px; font-weight: 500; line-height: 1.6; color: #fff; margin-bottom: 18px; }
+    .options-grid { display: flex; flex-direction: column; gap: 10px; }
 
     .option-btn {
       background: rgba(0,0,0,0.25);
@@ -371,53 +271,52 @@
       border-radius: 6px;
       color: var(--text);
       font-family: var(--font-body);
-      font-size: 15px;
-      padding: 14px 16px;
+      font-size: 14px;
+      padding: 12px 14px;
       text-align: left;
       cursor: pointer;
       display: flex;
-      align-items: flex-start;
-      gap: 12px;
+      gap: 10px;
       line-height: 1.5;
-      transition: all 0.15s;
     }
 
-    .option-btn:hover:not(:disabled) {
-      border-color: var(--accent);
-      background: rgba(255,255,255,0.03);
-      transform: translateX(4px);
-    }
-
-    .option-btn.correct {
-      border-color: var(--success) !important;
-      background: rgba(16, 185, 129, 0.15) !important;
-      color: #fff !important;
-    }
-
-    .option-btn.incorrect {
-      border-color: var(--error) !important;
-      background: rgba(244, 63, 94, 0.15) !important;
-      color: #fff !important;
-    }
+    .option-btn:hover:not(:disabled) { border-color: var(--accent); transform: translateX(3px); }
+    .option-btn.correct { border-color: var(--success) !important; background: rgba(16, 185, 129, 0.15) !important; color: #fff !important; }
+    .option-btn.incorrect { border-color: var(--error) !important; background: rgba(244, 63, 94, 0.15) !important; color: #fff !important; }
 
     .opt-letter {
       background: rgba(255,255,255,0.06);
-      border-radius: 4px;
-      padding: 2px 7px;
-      font-size: 12px;
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--accent);
       flex-shrink: 0;
     }
 
-    /* GABARITO & NAVEGAÇÃO */
+    /* FLASHCARD DE FIXAÇÃO IMEDIATA */
+    .flashcard-note {
+      display: none;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid var(--warn);
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: #fed7aa;
+    }
+
+    .flashcard-note.active { display: block; }
+
     .explanation-card {
       display: none;
       background: rgba(0,0,0,0.4);
       border-left: 4px solid var(--accent);
       border-radius: 0 6px 6px 0;
-      padding: 16px;
-      margin-top: 18px;
+      padding: 14px;
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
     .explanation-card.active { display: block; }
@@ -425,9 +324,8 @@
     .nav-buttons {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-      padding-top: 14px;
+      margin-top: 18px;
+      padding-top: 12px;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
@@ -435,61 +333,21 @@
       background: var(--accent);
       color: #000;
       border: none;
-      border-radius: 6px;
-      font-family: var(--font-body);
-      font-size: 13px;
+      border-radius: 4px;
+      font-size: 12px;
       font-weight: 700;
-      padding: 10px 18px;
+      padding: 8px 14px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
     }
-
-    .btn-action:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
     .btn-secondary {
       background: transparent;
       color: var(--text-muted);
       border: 1px solid var(--panel-border);
-      border-radius: 6px;
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 10px 18px;
+      border-radius: 4px;
+      font-size: 12px;
+      padding: 8px 14px;
       cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-secondary:hover { color: var(--text); border-color: var(--text-muted); }
-
-    /* MÓDULO APRENDER EM PARTES */
-    .diagnosis-cabinet {
-      background: var(--panel-bg);
-      border: 2px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 18px;
-    }
-
-    .weakness-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .weakness-card {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid var(--panel-border);
-      border-radius: 6px;
-      padding: 14px;
-    }
-
-    .weakness-card h5 {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 6px;
     }
 
     /* MODAL */
@@ -497,12 +355,11 @@
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.85);
       z-index: 100;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 16px;
     }
 
     .modal-overlay.open { display: flex; }
@@ -511,32 +368,19 @@
       background: var(--panel-bg);
       border: 2px solid var(--warn);
       border-radius: 8px;
-      max-width: 620px;
+      max-width: 600px;
       width: 100%;
-      padding: 24px;
+      padding: 20px;
       max-height: 85vh;
       overflow-y: auto;
-    }
-
-    .modal-body-text {
-      font-size: 15px;
-      line-height: 1.6;
-      white-space: pre-line;
-      background: rgba(0,0,0,0.3);
-      padding: 16px;
-      border-radius: 6px;
-      border: 1px dashed var(--warn);
-      margin: 14px 0;
-      color: #f3f4f6;
     }
   </style>
 </head>
 <body data-theme="bts">
 
   <div class="container">
-    <!-- HEADER -->
     <header>
-      <div class="game-logo">⚡ QUEST_EDITAL // UFBA TI</div>
+      <div class="game-logo">⚡ UFBA // ASSISTENTE EM ADMINISTRAÇÃO</div>
       <div class="theme-picker">
         <button class="btn-theme active" onclick="setTheme('bts', event)">BTS</button>
         <button class="btn-theme" onclick="setTheme('untamed', event)">Untamed</button>
@@ -545,35 +389,39 @@
       </div>
     </header>
 
-    <!-- BATALHA DOMÉSTICA ONLINE (SUPABASE REALTIME) -->
+    <!-- CALENDÁRIO & DUELO SEMANAL -->
     <div class="battlefield-card">
       <div class="battle-header">
-        <div class="battle-title">🧹 GUERRA DOS CÔMODOS (DISPUTA SEMANAL)</div>
-        <div class="sync-badge" id="sync-status">🟡 CONECTANDO...</div>
+        <div style="font-family:var(--font-display); font-size:10px; color:var(--warn);">
+          🏆 DUELO DE RELÍQUIAS & CÔMODOS
+        </div>
+        <div class="calendar-badge" id="calendar-info">SEMANA ATIVA</div>
       </div>
 
       <div class="duel-scores">
         <div class="duelist-box" id="box-amanda">
           <div class="duelist-name">👑 AMANDA</div>
-          <div class="duelist-points" id="pts-amanda">0 ACERTOS</div>
-          <div class="duelist-sub" id="sub-amanda">0 feitas • 0% taxa</div>
+          <div class="duelist-points" id="pts-amanda">0</div>
+          <div style="font-size:11px; color:var(--text-muted);" id="sub-amanda">0 acertos</div>
+          <div class="relic-shelf" id="relics-amanda" title="Relíquias Desbloqueadas"></div>
         </div>
 
-        <div style="font-family:var(--font-display); font-size:14px; color:var(--warn); text-align:center;">VS</div>
+        <div style="font-family:var(--font-display); font-size:12px; color:var(--warn);">VS</div>
 
         <div class="duelist-box" id="box-aymara">
           <div class="duelist-name">🌙 AYMARA</div>
-          <div class="duelist-points" id="pts-aymara">0 ACERTOS</div>
-          <div class="duelist-sub" id="sub-aymara">0 feitas • 0% taxa</div>
+          <div class="duelist-points" id="pts-aymara">0</div>
+          <div style="font-size:11px; color:var(--text-muted);" id="sub-aymara">0 acertos</div>
+          <div class="relic-shelf" id="relics-aymara" title="Relíquias Desbloqueadas"></div>
         </div>
       </div>
 
       <div class="forfeit-box">
-        <div id="forfeit-status" style="font-size:14px; line-height:1.5;">
-          <strong>STATUS:</strong> Preparando a disputa semanal...
+        <div id="forfeit-status" style="font-size:13px;">
+          Quem tiver mais acertos até domingo ganha a <strong>Relíquia da Semana</strong> e escapa do cômodo!
         </div>
         <div>
-          <span style="font-size:12px; color:var(--warn); margin-right:6px; font-weight:600;">CÔMODO:</span>
+          <span style="font-size:11px; color:var(--warn); margin-right:4px;">CÔMODO:</span>
           <select class="room-select" id="room-target" onchange="syncRoom(this.value)">
             <option value="Cozinha e Louças">🍳 Cozinha & Louças</option>
             <option value="Banheiro Principal">🧼 Banheiro Principal</option>
@@ -585,88 +433,85 @@
       </div>
     </div>
 
-    <!-- SELETOR DO JOGADOR LOCAL -->
+    <!-- SELETOR DE PERFIL -->
     <div class="profile-bar">
       <div class="slot-card active" id="slot-amanda" onclick="switchUser('amanda')">
-        <div class="slot-avatar">👑</div>
-        <div class="slot-info">
-          <h4>Amanda</h4>
-          <p id="stats-amanda">Nível 1 • 0 XP</p>
+        <div style="font-size:18px;">👑</div>
+        <div>
+          <div style="font-size:12px; font-weight:600;">Amanda</div>
+          <div style="font-size:11px; color:var(--text-muted);" id="stats-amanda">Nível 1 • 0 XP</div>
         </div>
       </div>
       <div class="slot-card" id="slot-aymara" onclick="switchUser('aymara')">
-        <div class="slot-avatar">🌙</div>
-        <div class="slot-info">
-          <h4>Aymara</h4>
-          <p id="stats-aymara">Nível 1 • 0 XP</p>
+        <div style="font-size:18px;">🌙</div>
+        <div>
+          <div style="font-size:12px; font-weight:600;">Aymara</div>
+          <div style="font-size:11px; color:var(--text-muted);" id="stats-aymara">Nível 1 • 0 XP</div>
         </div>
       </div>
       <div class="slot-card" id="slot-teste" onclick="switchUser('teste')">
-        <div class="slot-avatar">👾</div>
-        <div class="slot-info">
-          <h4>Utilizador de Teste</h4>
-          <p id="stats-teste">Modo treino avulso</p>
+        <div style="font-size:18px;">👾</div>
+        <div>
+          <div style="font-size:12px; font-weight:600;">Treino Livre</div>
+          <div style="font-size:11px; color:var(--text-muted);">Sem disputa</div>
         </div>
       </div>
     </div>
 
-    <!-- MODOS DE TREINO -->
-    <div class="game-modes">
-      <button class="btn-mode active" id="mode-all" onclick="setMode('all', event)">TODAS</button>
-      <button class="btn-mode" id="mode-medium" onclick="setMode('medium', event)">MÉDIO</button>
-      <button class="btn-mode" id="mode-hard" onclick="setMode('hard', event)">DIFÍCIL</button>
-      <button class="btn-mode" id="mode-trap" onclick="setMode('trap', event)">⚠️️ PEGADINHAS</button>
-      <button class="btn-mode" id="mode-refine" onclick="setMode('refine', event)">🎯 REFINAMENTO</button>
+    <!-- FILTRO COMBINADO: MATÉRIA & REPETIÇÃO ESPAÇADA -->
+    <div class="filter-zone">
+      <div style="font-size:11px; color:var(--text-muted); font-weight:700; margin-bottom:6px;">DISCIPLINA:</div>
+      <div class="subject-tabs">
+        <button class="tab-btn active" onclick="setSubject('all', event)">📚 Todas</button>
+        <button class="tab-btn" onclick="setSubject('Língua Portuguesa', event)">📖 Língua Portuguesa</button>
+        <button class="tab-btn" onclick="setSubject('Noções de Informática', event)">💻 Noções de Informática</button>
+        <button class="tab-btn" onclick="setSubject('Administração Pública', event)">⚖️ Administração Pública</button>
+        <button class="tab-btn" onclick="setSubject('Conhecimentos Específicos', event)">📂 Específicas</button>
+      </div>
+
+      <div style="font-size:11px; color:var(--text-muted); font-weight:700; margin:10px 0 6px 0;">MODO DE ESTUDO:</div>
+      <div class="mode-tabs">
+        <button class="mode-btn active" onclick="setMode('all', event)">Normal</button>
+        <button class="mode-btn" onclick="setMode('mistakes', event)">🔁 Minhas Dificuldades</button>
+        <button class="mode-btn" onclick="setMode('trap', event)">⚠ Só Pegadinhas</button>
+        <button class="mode-btn" onclick="setMode('hard', event)">🔥 Difíceis</button>
+      </div>
     </div>
 
     <!-- CABINE DO QUIZ -->
     <div class="arcade-cabinet">
       <div class="hud-bar">
-        <div class="hud-tag">UFBA 2026 // EDITAL TI</div>
-        <div>
-          Combo: <strong id="hud-streak" style="color:var(--success);">0</strong> | 
-          XP: <strong id="hud-xp" style="color:var(--accent);">0</strong>
-        </div>
+        <span id="q-category">CARREGANDO...</span>
+        <span>Combo: <strong id="hud-streak" style="color:var(--success);">0</strong> | XP: <strong id="hud-xp" style="color:var(--accent);">0</strong></span>
       </div>
 
-      <div>
-        <div class="question-topic" id="q-category">CARREGANDO QUESTÃO...</div>
-        <div class="question-title" id="q-statement">Aguarde o carregamento do enunciado...</div>
-      </div>
-
+      <div class="question-title" id="q-statement">Aguarde o carregamento do enunciado...</div>
       <div class="options-grid" id="options-container"></div>
 
-      <div class="explanation-card" id="explanation-card">
-        <div style="color:var(--accent); font-weight:700; font-size:12px; margin-bottom:6px; text-transform:uppercase;">
-          🔍 Raio-X & Fundamentação:
-        </div>
-        <div id="explanation-text" style="font-size:14px; line-height:1.6; color:#e5e7eb;"></div>
+      <!-- FIXAÇÃO IMEDIATA (FLASHCARD) -->
+      <div class="flashcard-note" id="flashcard-box">
+        <strong>💡 NOTA MENTAL DE FIXAÇÃO:</strong>
+        <div id="flashcard-text" style="margin-top:4px;"></div>
       </div>
 
-      <!-- BOTÕES DE NAVEGAÇÃO -->
+      <!-- RAIO-X COMPLETO -->
+      <div class="explanation-card" id="explanation-card">
+        <strong style="color:var(--accent); text-transform:uppercase;">🔍 Raio-X & Fundamentação da Banca:</strong>
+        <div id="explanation-text" style="margin-top:4px; color:#e2e8f0;"></div>
+      </div>
+
       <div class="nav-buttons">
         <button class="btn-secondary" onclick="prevQuestion()">❮ ANTERIOR</button>
         <button class="btn-action" onclick="nextQuestion()">PRÓXIMA ❯</button>
       </div>
     </div>
-
-    <!-- APRENDER EM PARTES -->
-    <div class="diagnosis-cabinet">
-      <div style="font-family:var(--font-display); font-size:10px; color:var(--warn); margin-bottom:6px;">
-        📖 DIAGNÓSTICO: APRENDER EM PARTES
-      </div>
-      <p style="font-size:13px; color:var(--text-muted);">
-        O sistema analisa as disciplinas com maior incidência de erro para revisão sintética.
-      </p>
-      <div class="weakness-list" id="weakness-list"></div>
-    </div>
   </div>
 
-  <!-- MODAL DE RESUMO SINTÉTICO -->
+  <!-- MODAL DE RESUMO -->
   <div class="modal-overlay" id="modal-synth">
     <div class="modal-content">
       <div style="font-family:var(--font-display); font-size:11px; color:var(--warn);" id="modal-title">SÍNTESE</div>
-      <div class="modal-body-text" id="modal-body"></div>
+      <div style="font-size:14px; line-height:1.6; white-space:pre-line; background:rgba(0,0,0,0.3); padding:14px; border:1px dashed var(--warn); margin:12px 0;" id="modal-body"></div>
       <div style="text-align:right;">
         <button class="btn-action" onclick="closeSynthModal()">ENTENDIDO ❯</button>
       </div>
@@ -674,338 +519,257 @@
   </div>
 
   <script>
-    /* =========================================================
-       CONFIGURAÇÃO DO SUPABASE
-       ========================================================= */
+    /* SUPABASE CONFIG */
     const SUPABASE_URL = "https://wdbzfymjjlojeewsyfyk.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_0rllOtrm9Tx8d-dRbIeGbg_tGiZmTo2";
 
     let supabaseClient = null;
     try {
-      if (window.supabase) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-    } catch (e) {
-      console.warn("Supabase não carregado, usando modo offline local.", e);
-    }
+      if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch(e) {}
 
-    /* =========================================================
-       BANCO DE QUESTÕES PRÉ-DEFINIDO (EDITAL UFBA 2026 - TI)
-       ========================================================= */
+    /* TABELA DE RELÍQUIAS POR TEMA */
+    const RELICS_REWARD = {
+      bts: { icon: "💜", name: "Microfone Imperial Borahae" },
+      untamed: { icon: "🏮", name: "Flauta Chenqing do Patriarca" },
+      ghibli: { icon: "🔥", name: "Chama Mágica de Calcifer" },
+      coraline: { icon: "🗝️", name: "Chave de Olho Furado" }
+    };
+
+    /* BANCO DE QUESTÕES COM PONTO DE FIXAÇÃO */
     const EDITAL_DATABASE = {
-      topicos_sintese: {
-        "Lei 8.112/90": `⚡ RESUMO: LEI 8.112/90\n- Posse: 30 dias (improrrogável) contados da nomeação.\n- Exercício: 15 dias contados da posse.\n- Demissão: Penalidade punitiva por falta grave apurada em PAD.\n- Exoneração: Desligamento sem caráter punitivo (a pedido ou reprovação no estágio probatório).`,
-        "Portas Lógicas": `⚡ PORTAS LÓGICAS & ÁLGEBRA BOOLEANA\n- AND: Saída 1 apenas se TODAS as entradas forem 1.\n- OR: Saída 1 se PELO MENOS UMA entrada for 1.\n- XOR (OU Exclusivo): Saída 1 se as entradas forem DIFERENTES (0 e 1). Entradas iguais geram 0.\n- Base Hexadecimal: Cada dígito hexa equivale a 4 bits binários (Ex: D = 1101, 6 = 0110).`,
-        "Licitações (Lei 14.133/21)": `⚡ NOVA LEI DE LICITAÇÕES (14.133/2021)\n- Inexigibilidade: Competição impossível (fornecedor exclusivo, notória especialização de natureza intelectual).\n- Dispensa: A competição seria viável, mas a lei autoriza não licitar (pequeno valor, emergência).`,
-        "Redes de Computadores": `⚡ REDES & PROTOCOLOS\n- Camada de Transporte: TCP (conexão confiável, orientada a fluxo) vs UDP (rápido, sem garantia de entrega).\n- Portas Padrão: DNS (53), HTTP (80), HTTPS (443), SSH (22), DHCP (67/68).\n- Máscara /24: Fornece 256 endereços (254 úteis para hosts).`,
-        "Sistemas Operacionais": `⚡ SISTEMAS OPERACIONAIS\n- Permissões Linux: r=4, w=2, x=1. O comando chmod 755 concede rwx ao dono e rx ao grupo e outros.\n- Gerenciamento de Processos: Preempção permite ao SO interromper um processo para conceder CPU a outro.`,
-        "Língua Portuguesa": `⚡ CRASE FACULTATIVA (Mnemônico: 'Até a sua Maria')\n- Após a preposição 'até'.\n- Diante de pronome possessivo feminino singular (minha, sua, tua).\n- Diante de nome próprio feminino.`
-      },
       questoes: [
         {
-          topic: "Lei 8.112/90",
+          id: 1,
+          subject: "Língua Portuguesa",
           difficulty: "medium",
-          isTrap: false,
-          isRefine: false,
-          statement: "Conforme o regime jurídico previsto na Lei nº 8.112/1990, uma vez publicado o ato de provimento por nomeação, qual é o prazo legal e improrrogável fixado para a posse?",
-          options: ["15 (quinze) dias.", "30 (trinta) dias.", "20 (vinte) dias.", "45 (quarenta e cinco) dias.", "60 (sessenta) dias."],
-          correct: 1,
-          explanation: "Art. 13, § 1º da Lei 8.112/90: A posse ocorrerá no prazo de 30 (trinta) dias contados da publicação do ato de provimento. Para entrar em exercício, o prazo subsequente é de 15 dias."
-        },
-        {
-          topic: "Portas Lógicas",
-          difficulty: "hard",
           isTrap: true,
-          isRefine: true,
-          statement: "Considere um circuito no qual as entradas lógicas A=1 e B=1 são conectadas a uma porta XOR. A saída dessa porta é então ligada à entrada de uma porta NOT. Qual será o valor lógico obtido no terminal de saída?",
-          options: ["Nível lógico 0.", "Nível lógico 1.", "Alta impedância.", "Sinal oscilatório.", "Indeterminado."],
-          correct: 1,
-          explanation: "Na porta XOR, entradas idênticas (1 e 1) resultam em 0. Ao passar pela porta inversora NOT, o valor é negado, resultando em 1."
-        },
-        {
-          topic: "Licitações (Lei 14.133/21)",
-          difficulty: "hard",
-          isTrap: true,
-          isRefine: false,
-          statement: "A contratação direta pela Administração Pública de profissional de notória especialização para execução de serviço técnico especializado de natureza predominantemente intelectual enquadra-se como:",
-          options: ["Dispensa de licitação por valor residual.", "Pregão eletrônico com ressalva.", "Inexigibilidade de licitação.", "Concurso sumário.", "Alienação fiduciária."],
-          correct: 2,
-          explanation: "A inviabilidade de competição decorrente de serviço técnico especializado com profissional de notória especialização configura caso de INEXIGIBILIDADE (Art. 74, III da Lei 14.133/21)."
-        },
-        {
-          topic: "Redes de Computadores",
-          difficulty: "medium",
-          isTrap: false,
-          isRefine: false,
-          statement: "Na arquitetura TCP/IP, qual protocolo da camada de transporte opera sem garantia de entrega e sem confirmação de recebimento (handshake prévio), priorizando velocidade de transmissão?",
-          options: ["TCP", "UDP", "ICMP", "IP", "ARP"],
-          correct: 1,
-          explanation: "O UDP (User Datagram Protocol) é não orientado à conexão e não garante a integridade ou a ordem dos pacotes, priorizando menor latência."
-        },
-        {
-          topic: "Sistemas Operacionais",
-          difficulty: "hard",
-          isTrap: false,
-          isRefine: true,
-          statement: "No sistema operacional Linux, ao aplicar o comando 'chmod 754 script.sh', quais permissões são concedidas, respectivamente, ao proprietário, ao grupo e aos outros usuários?",
+          statement: "Assinale a alternativa em que a ocorrência do acento grave indicativo de crase é rigorosamente FACULTATIVA:",
           options: [
-            "rwx (leitura, escrita, execução), r-x (leitura, execução) e r-- (leitura apenas).",
-            "rwx (leitura, escrita, execução), rw- (leitura, escrita) e r-- (leitura apenas).",
-            "rw- (leitura, escrita), rwx (leitura, escrita, execução) e --x (execução apenas).",
-            "rwx (leitura, escrita, execução), r-- (leitura apenas) e r-x (leitura, execução).",
-            "r-x (leitura, execução), rw- (leitura, escrita) e --- (sem acesso)."
-          ],
-          correct: 0,
-          explanation: "No octal de permissões: 7 = 4+2+1 (rwx para o dono); 5 = 4+1 (r-x para o grupo); 4 = 4 (r-- para outros)."
-        },
-        {
-          topic: "Portas Lógicas",
-          difficulty: "hard",
-          isTrap: true,
-          isRefine: true,
-          statement: "O número binário (11010110)₂ convertido para o sistema hexadecimal (base 16) resulta exatamente em:",
-          options: ["C6₁₆", "E4₁₆", "D6₁₆", "B6₁₆", "A4₁₆"],
-          correct: 2,
-          explanation: "Dividindo o número em quartetos de bits: 1101 = 13 (letra D em hexa) e 0110 = 6 em decimal/hexa. Portanto, D6₁₆."
-        },
-        {
-          topic: "Língua Portuguesa",
-          difficulty: "medium",
-          isTrap: true,
-          isRefine: false,
-          statement: "Assinale a frase em que o uso do acento grave indicativo de crase é estritamente FACULTATIVO:",
-          options: [
-            "Ela retornou à casa de repouso.",
-            "Caminhamos até à orla marítima.",
-            "Comprei o equipamento de rede à prazo.",
-            "Entreguei o documento à diretoria.",
-            "Os técnicos trabalharam às pressas durante a pane."
+            "Os assistentes compareceram à assembleia geral.",
+            "Caminhamos até à recepção da reitoria.",
+            "O diretor solicitou relatórios à prazo.",
+            "O ofício foi entregue à Vossa Magnificência.",
+            "O servidor agiu às pressas durante o atendimento."
           ],
           correct: 1,
-          explanation: "Depois da preposição 'até', o emprego da crase é facultativo ('até a orla' ou 'até à orla'). Diante de palavras masculinas ('à prazo') o uso é incorreto."
+          fixation: "Regra de Ouro: A crase é facultativa após 'ATÉ', diante de NOME PRÓPRIO FEMININO e antes de POSSESSIVO FEMININO (sua/minha/tua). Diante de palavras masculinas ou pronomes de tratamento, é proibida!",
+          explanation: "Após a preposição 'até', o emprego da crase é facultativo ('até a recepção' ou 'até à recepção'). Diante de palavras masculinas ('à prazo') é incorreto."
+        },
+        {
+          id: 2,
+          subject: "Noções de Informática",
+          difficulty: "medium",
+          isTrap: false,
+          statement: "Qual tipo de código malicioso sequestra dados por meio de criptografia forte e exige pagamento financeiro (resgate) para restabelecer o acesso do usuário?",
+          options: ["Worm", "Ransomware", "Spyware", "Adware", "Rootkit"],
+          correct: 1,
+          fixation: "Ransom = Resgate. O Ransomware bloqueia e cifra seus arquivos exigindo resgate (geralmente criptomoedas).",
+          explanation: "Ransomware é a praga virtual que cifra pastas e volumes de dados, impedindo o acesso legítimo e exigindo transferências para disponibilizar a chave de descriptografia."
+        },
+        {
+          id: 3,
+          subject: "Administração Pública",
+          difficulty: "medium",
+          isTrap: false,
+          statement: "Conforme o regime disciplinar da Lei Federal nº 8.112/1990, são penalidades disciplinares expressamente cominadas, EXCETO:",
+          options: ["Advertência.", "Suspensão.", "Demissão.", "Exoneração.", "Destituição de cargo em comissão."],
+          correct: 3,
+          fixation: "Exoneração NÃO É penalidade! Demissão é punição grave de expulsão do cargo; Exoneração é mero encerramento do vínculo (a pedido ou reprovação em estágio).",
+          explanation: "Art. 127 da Lei nº 8.112/90: São penalidades: advertência, suspensão, demissão, cassação de aposentadoria/disponibilidade e destituição. Exoneração não integra o rol punitivo."
+        },
+        {
+          id: 4,
+          subject: "Conhecimentos Específicos",
+          difficulty: "hard",
+          isTrap: true,
+          statement: "Na Lei nº 14.133/2021, a inviabilidade de competição para contratação de profissional de notória especialização de serviço intelectual caracteriza hipótese de:",
+          options: [
+            "Dispensa de licitação.",
+            "Inexigibilidade de licitação.",
+            "Pregão presencial simplificado.",
+            "Concurso com dispensa.",
+            "Alienação fiduciária."
+          ],
+          correct: 1,
+          fixation: "Competição inviável/impossível = INEXIGIBILIDADE. Competição viável, mas dispensada por conveniência da lei = DISPENSA.",
+          explanation: "Art. 74 da Lei 14.133/21: É inexigível a licitação quando inviável a competição, notadamente em serviços técnicos especializados com profissional consagrado ou notório."
+        },
+        {
+          id: 5,
+          subject: "Conhecimentos Específicos",
+          difficulty: "medium",
+          isTrap: false,
+          statement: "Na gestão documental arquivística (Teoria das Três Idades), os documentos de valor permanente:",
+          options: [
+            "Podem ser eliminados após 30 anos de arquivamento.",
+            "São guardados junto ao setor de protocolo ativo.",
+            "São inalienáveis, imprescritíveis e nunca podem ser eliminados.",
+            "Devem ser expurgados após microfilmagem simples.",
+            "Pertencem exclusivamente à fase corrente."
+          ],
+          correct: 2,
+          fixation: "Arquivo Permanente (3ª Idade) tem valor histórico/cultural definitivo: NUNCA se joga fora, não prescreve e não se vende!",
+          explanation: "Art. 10 da Lei nº 8.159/91: Os documentos de valor permanente são inalienáveis e imprescritíveis, ficando sob guarda definitiva por representarem patrimônio histórico."
+        },
+        {
+          id: 6,
+          subject: "Conhecimentos Específicos",
+          difficulty: "hard",
+          isTrap: true,
+          statement: "Na administração de materiais, a classificação ABC permite identificar a prioridade dos estoques. Sobre os itens da Classe A, é correto afirmar:",
+          options: [
+            "Representam o maior número físico de itens e o menor custo.",
+            "Correspondem a pequena quantidade de itens que concentram a maior parte do investimento financeiro.",
+            "São itens descartáveis e isentos de controle anual.",
+            "Possuem demanda altamente instável e baixo valor unitário.",
+            "São adquiridos exclusivamente por pregão presencial."
+          ],
+          correct: 1,
+          fixation: "Classe A = Alta relevância financeira, pouca quantidade física. Classe C = Grande volume de peças, valor monetário baixo.",
+          explanation: "Na análise de Pareto (Curva ABC), a Classe A representa cerca de 20% do volume físico estocado, mas responde por aproximadamente 80% do valor monetário acumulado."
         }
       ]
     };
 
-    /* =========================================================
-       ESTADO LOCAL & SINCRONIZAÇÃO
-       ========================================================= */
-    const LOCAL_KEY = "quest_edital_local_backup";
+    /* ESTADO & PERSISTÊNCIA */
+    const LOCAL_KEY = "quest_edital_assistente_v3";
+    let activeTheme = "bts";
 
-    function loadLocal() {
+    function getWeekId() {
+      const now = new Date();
+      const oneJan = new Date(now.getFullYear(), 0, 1);
+      const week = Math.ceil((((now - oneJan) / 86400000) + oneJan.getDay() + 1) / 7);
+      return `${now.getFullYear()}-S${week}`;
+    }
+
+    function loadState() {
       try {
-        const item = localStorage.getItem(LOCAL_KEY);
-        if (item) return JSON.parse(item);
-      } catch (e) {}
+        const d = localStorage.getItem(LOCAL_KEY);
+        if (d) return JSON.parse(d);
+      } catch(e) {}
       return {
-        amanda: { xp: 0, streak: 0, weekly_right: 0, total_answered: 0, mistakes: {} },
-        aymara: { xp: 0, streak: 0, weekly_right: 0, total_answered: 0, mistakes: {} },
-        teste:  { xp: 0, streak: 0, weekly_right: 0, total_answered: 0, mistakes: {} },
-        room: "Cozinha e Louças"
+        week: getWeekId(),
+        room: "Cozinha e Louças",
+        profiles: {
+          amanda: { xp: 0, streak: 0, weekly_right: 0, mistakes: [], relics: [] },
+          aymara: { xp: 0, streak: 0, weekly_right: 0, mistakes: [], relics: [] },
+          teste:  { xp: 0, streak: 0, weekly_right: 0, mistakes: [], relics: [] }
+        }
       };
     }
 
-    let localState = loadLocal();
-    let cloudData = {
-      amanda: localState.amanda,
-      aymara: localState.aymara,
-      teste: localState.teste
-    };
-    let currentRoom = localState.room || "Cozinha e Louças";
-
+    let appData = loadState();
     let currentUser = "amanda";
+    let currentSubject = "all";
     let currentMode = "all";
     let activeIndex = 0;
     let currentDeck = [];
 
-    // Sintetizador de Áudio (Suave)
-    let audioCtx = null;
-    function playBeep(type) {
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        const t = audioCtx.currentTime;
-
-        if (type === 'correct') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(523, t);
-          osc.frequency.setValueAtTime(659, t + 0.08);
-          gain.gain.setValueAtTime(0.08, t);
-          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
-          osc.start(t);
-          osc.stop(t + 0.25);
-        } else if (type === 'error') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(220, t);
-          osc.frequency.setValueAtTime(160, t + 0.1);
-          gain.gain.setValueAtTime(0.08, t);
-          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-          osc.start(t);
-          osc.stop(t + 0.2);
-        } else {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(440, t);
-          gain.gain.setValueAtTime(0.03, t);
-          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
-          osc.start(t);
-          osc.stop(t + 0.05);
-        }
-      } catch (e) {}
-    }
-
-    /* CARREGAMENTO SUPABASE */
-    async function loadCloudState() {
-      if (!supabaseClient) {
-        document.getElementById('sync-status').innerText = "🟢 MODO OFFLINE (LOCAL)";
-        return;
-      }
-
+    /* SINCRONIZAÇÃO EM NUVEM */
+    async function syncCloud() {
+      if (!supabaseClient) return;
       try {
         const { data, error } = await supabaseClient.from('game_state').select('*');
         if (error) throw error;
-
         if (data && data.length > 0) {
-          data.forEach(row => {
-            if (cloudData[row.user_id]) {
-              cloudData[row.user_id] = {
-                xp: row.xp || 0,
-                streak: row.streak || 0,
-                weekly_right: row.weekly_right || 0,
-                total_answered: row.total_answered || 0,
-                mistakes: row.mistakes || {}
-              };
+          data.forEach(r => {
+            if (appData.profiles[r.user_id]) {
+              appData.profiles[r.user_id].xp = r.xp || 0;
+              appData.profiles[r.user_id].weekly_right = r.weekly_right || 0;
+              appData.profiles[r.user_id].relics = r.relics || [];
             }
-            if (row.room_target) currentRoom = row.room_target;
+            if (r.room_target) appData.room = r.room_target;
           });
-          document.getElementById('sync-status').innerText = "🟢 SUPABASE ONLINE";
+          renderHUD();
+          renderBattle();
         }
-        renderHUD();
-        renderBattleboard();
-      } catch (err) {
-        console.warn("Falha no Supabase. Mantendo dados locais:", err);
-        document.getElementById('sync-status').innerText = "🟡 MODO LOCAL ATIVO";
+      } catch(e) {
+        console.warn("Modo local ativo.");
       }
     }
 
-    function subscribeRealtime() {
+    async function pushUpdate() {
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(appData));
       if (!supabaseClient) return;
-
-      try {
-        supabaseClient
-          .channel('game_state_sync')
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'game_state' }, payload => {
-            const row = payload.new;
-            if (row && row.user_id && cloudData[row.user_id]) {
-              cloudData[row.user_id] = {
-                xp: row.xp,
-                streak: row.streak,
-                weekly_right: row.weekly_right,
-                total_answered: row.total_answered,
-                mistakes: row.mistakes || {}
-              };
-              if (row.room_target) currentRoom = row.room_target;
-
-              const badge = document.getElementById('sync-status');
-              badge.innerText = "⚡ ATUALIZADO!";
-              setTimeout(() => badge.innerText = "🟢 SUPABASE ONLINE", 1500);
-
-              renderHUD();
-              renderBattleboard();
-            }
-          })
-          .subscribe();
-      } catch (e) {}
-    }
-
-    async function pushUserUpdate() {
-      const u = cloudData[currentUser];
-      // Salva localmente primeiro
-      try {
-        localStorage.setItem(LOCAL_KEY, JSON.stringify({ ...cloudData, room: currentRoom }));
-      } catch (e) {}
-
-      if (!supabaseClient) return;
-
+      const u = appData.profiles[currentUser];
       try {
         await supabaseClient.from('game_state').upsert({
           user_id: currentUser,
           xp: u.xp,
-          streak: u.streak,
           weekly_right: u.weekly_right,
-          total_answered: u.total_answered,
-          mistakes: u.mistakes,
-          room_target: currentRoom,
+          relics: u.relics,
+          room_target: appData.room,
           updated_at: new Date().toISOString()
         });
-      } catch (err) {
-        console.warn("Erro ao salvar na nuvem:", err);
-      }
+      } catch(e) {}
     }
 
-    async function syncRoom(roomName) {
-      currentRoom = roomName;
-      try {
-        localStorage.setItem(LOCAL_KEY, JSON.stringify({ ...cloudData, room: currentRoom }));
-      } catch (e) {}
-
+    async function syncRoom(r) {
+      appData.room = r;
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(appData));
       if (supabaseClient) {
-        try {
-          await supabaseClient.from('game_state').update({ room_target: roomName }).neq('user_id', '');
-        } catch (err) {}
+        try { await supabaseClient.from('game_state').update({ room_target: r }).neq('user_id', ''); } catch(e) {}
       }
-      renderBattleboard();
+      renderBattle();
     }
 
-    /* CONTROLE DE TEMAS & NAVEGAÇÃO */
-    function setTheme(th, evt) {
-      playBeep('click');
+    /* CONTROLES DO JOGO */
+    function setTheme(th, e) {
+      activeTheme = th;
       document.body.setAttribute('data-theme', th);
       document.querySelectorAll('.btn-theme').forEach(b => b.classList.remove('active'));
-      if (evt && evt.target) evt.target.classList.add('active');
+      if (e && e.target) e.target.classList.add('active');
     }
 
-    function switchUser(uid) {
-      playBeep('click');
-      currentUser = uid;
+    function switchUser(u) {
+      currentUser = u;
       document.querySelectorAll('.slot-card').forEach(s => s.classList.remove('active'));
-      const activeSlot = document.getElementById(`slot-${uid}`);
-      if (activeSlot) activeSlot.classList.add('active');
+      document.getElementById(`slot-${u}`).classList.add('active');
       renderHUD();
+      filterDeck();
     }
 
-    function setMode(mode, evt) {
-      playBeep('click');
-      currentMode = mode;
-      document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
-      if (evt && evt.target) evt.target.classList.add('active');
+    function setSubject(s, e) {
+      currentSubject = s;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if (e && e.target) e.target.classList.add('active');
+      filterDeck();
+    }
+
+    function setMode(m, e) {
+      currentMode = m;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      if (e && e.target) e.target.classList.add('active');
       filterDeck();
     }
 
     function filterDeck() {
-      if (currentMode === 'all') currentDeck = [...EDITAL_DATABASE.questoes];
-      else if (currentMode === 'medium') currentDeck = EDITAL_DATABASE.questoes.filter(q => q.difficulty === 'medium');
-      else if (currentMode === 'hard') currentDeck = EDITAL_DATABASE.questoes.filter(q => q.difficulty === 'hard');
-      else if (currentMode === 'trap') currentDeck = EDITAL_DATABASE.questoes.filter(q => q.isTrap);
-      else if (currentMode === 'refine') currentDeck = EDITAL_DATABASE.questoes.filter(q => q.isRefine);
+      let deck = EDITAL_DATABASE.questoes;
+      if (currentSubject !== 'all') deck = deck.filter(q => q.subject === currentSubject);
 
-      if (currentDeck.length === 0) currentDeck = [...EDITAL_DATABASE.questoes];
+      const u = appData.profiles[currentUser];
+      if (currentMode === 'mistakes') {
+        deck = deck.filter(q => (u.mistakes || []).includes(q.id));
+      } else if (currentMode === 'trap') {
+        deck = deck.filter(q => q.isTrap);
+      } else if (currentMode === 'hard') {
+        deck = deck.filter(q => q.difficulty === 'hard');
+      }
 
+      currentDeck = deck.length > 0 ? deck : EDITAL_DATABASE.questoes;
       activeIndex = 0;
       loadCard();
     }
 
     function loadCard() {
-      const expCard = document.getElementById('explanation-card');
-      if (expCard) expCard.classList.remove('active');
+      document.getElementById('explanation-card').classList.remove('active');
+      document.getElementById('flashcard-box').classList.remove('active');
 
       const q = currentDeck[activeIndex];
       if (!q) return;
 
-      document.getElementById('q-category').innerText = `QUESTÃO ${activeIndex + 1} DE ${currentDeck.length} • DISCIPLINA: ${q.topic}`;
+      document.getElementById('q-category').innerText = `QUESTÃO ${activeIndex + 1} DE ${currentDeck.length} • [${q.subject.toUpperCase()}]`;
       document.getElementById('q-statement').innerText = q.statement;
 
       const cont = document.getElementById('options-container');
@@ -1021,140 +785,108 @@
       });
     }
 
-    function checkAnswer(selIdx) {
+    function checkAnswer(idx) {
       const q = currentDeck[activeIndex];
       const buttons = document.querySelectorAll('.option-btn');
       buttons.forEach(b => b.disabled = true);
 
-      const u = cloudData[currentUser];
-      u.total_answered += 1;
-
-      const isRight = (selIdx === q.correct);
-      buttons[selIdx].classList.add(isRight ? 'correct' : 'incorrect');
+      const u = appData.profiles[currentUser];
+      const isRight = (idx === q.correct);
+      buttons[idx].classList.add(isRight ? 'correct' : 'incorrect');
 
       if (isRight) {
-        playBeep('correct');
-        u.streak += 1;
-        u.weekly_right += 1;
-        u.xp += 50 + (u.streak * 10);
+        u.streak = (u.streak || 0) + 1;
+        u.weekly_right = (u.weekly_right || 0) + 1;
+        u.xp = (u.xp || 0) + 50 + (u.streak * 10);
+        // Remove do caderno de erros se acertar
+        u.mistakes = (u.mistakes || []).filter(id => id !== q.id);
+
+        // Se atingir marco de 5 acertos na semana, ganha a relíquia do tema ativo
+        if (u.weekly_right % 5 === 0) {
+          const r = RELICS_REWARD[activeTheme];
+          if (!u.relics.includes(r.icon)) u.relics.push(r.icon);
+        }
       } else {
-        playBeep('error');
         buttons[q.correct].classList.add('correct');
         u.streak = 0;
-        u.mistakes[q.topic] = (u.mistakes[q.topic] || 0) + 1;
+        if (!u.mistakes.includes(q.id)) u.mistakes.push(q.id);
+
+        // Dispara Flashcard de Fixação
+        document.getElementById('flashcard-text').innerText = q.fixation;
+        document.getElementById('flashcard-box').classList.add('active');
       }
 
-      pushUserUpdate();
+      pushUpdate();
       renderHUD();
-      renderBattleboard();
+      renderBattle();
 
       document.getElementById('explanation-text').innerText = q.explanation;
       document.getElementById('explanation-card').classList.add('active');
     }
 
     function nextQuestion() {
-      playBeep('click');
       activeIndex = (activeIndex + 1) % currentDeck.length;
       loadCard();
     }
 
     function prevQuestion() {
-      playBeep('click');
       activeIndex = (activeIndex - 1 + currentDeck.length) % currentDeck.length;
       loadCard();
     }
 
     function renderHUD() {
-      const u = cloudData[currentUser];
+      const u = appData.profiles[currentUser];
       document.getElementById('hud-streak').innerText = u.streak || 0;
       document.getElementById('hud-xp').innerText = u.xp || 0;
 
       ['amanda', 'aymara', 'teste'].forEach(id => {
-        const prof = cloudData[id];
-        const lvl = Math.floor((prof.xp || 0) / 300) + 1;
-        const statsEl = document.getElementById(`stats-${id}`);
-        if (statsEl) statsEl.innerText = `Nível ${lvl} • ${prof.xp || 0} XP`;
+        const p = appData.profiles[id];
+        const lvl = Math.floor((p.xp || 0) / 300) + 1;
+        const el = document.getElementById(`stats-${id}`);
+        if (el) el.innerText = `Nível ${lvl} • ${p.xp || 0} XP`;
       });
-
-      renderWeaknesses();
     }
 
-    function renderBattleboard() {
-      const a = cloudData.amanda;
-      const ay = cloudData.aymara;
+    function renderBattle() {
+      const a = appData.profiles.amanda;
+      const ay = appData.profiles.aymara;
 
-      const rateA = a.total_answered > 0 ? Math.round((a.weekly_right / a.total_answered) * 100) : 0;
-      const rateAy = ay.total_answered > 0 ? Math.round((ay.weekly_right / ay.total_answered) * 100) : 0;
+      document.getElementById('pts-amanda').innerText = a.weekly_right || 0;
+      document.getElementById('sub-amanda').innerText = `${a.weekly_right || 0} acertos`;
+      document.getElementById('relics-amanda').innerText = (a.relics || []).join(" ");
 
-      document.getElementById('pts-amanda').innerText = `${a.weekly_right} ACERTOS`;
-      document.getElementById('sub-amanda').innerText = `${a.total_answered} resolvidas • ${rateA}% taxa`;
+      document.getElementById('pts-aymara').innerText = ay.weekly_right || 0;
+      document.getElementById('sub-aymara').innerText = `${ay.weekly_right || 0} acertos`;
+      document.getElementById('relics-aymara').innerText = (ay.relics || []).join(" ");
 
-      document.getElementById('pts-aymara').innerText = `${ay.weekly_right} ACERTOS`;
-      document.getElementById('sub-aymara').innerText = `${ay.total_answered} resolvidas • ${rateAy}% taxa`;
+      document.getElementById('calendar-info').innerText = `RODADA: ${appData.week}`;
+      document.getElementById('room-target').value = appData.room;
 
       const boxA = document.getElementById('box-amanda');
       const boxAy = document.getElementById('box-aymara');
-      const statusEl = document.getElementById('forfeit-status');
+      const st = document.getElementById('forfeit-status');
 
       boxA.className = 'duelist-box';
       boxAy.className = 'duelist-box';
 
-      document.getElementById('room-target').value = currentRoom;
-
       if (a.weekly_right > ay.weekly_right) {
         boxA.classList.add('winning');
         boxAy.classList.add('losing');
-        statusEl.innerHTML = `👑 <strong>Amanda está na frente!</strong> Aymara assume a faxina em: <strong>${currentRoom}</strong>!`;
+        st.innerHTML = `👑 <strong>Amanda lidera!</strong> Aymara assume a limpeza em: <strong>${appData.room}</strong>.`;
       } else if (ay.weekly_right > a.weekly_right) {
         boxAy.classList.add('winning');
         boxA.classList.add('losing');
-        statusEl.innerHTML = `🌙 <strong>Aymara está na frente!</strong> Amanda assume a faxina em: <strong>${currentRoom}</strong>!`;
+        st.innerHTML = `🌙 <strong>Aymara lidera!</strong> Amanda assume a limpeza em: <strong>${appData.room}</strong>.`;
       } else {
-        statusEl.innerHTML = `⚖️ <strong>Empate no placar!</strong> Quem acertar mais escapa de: <strong>${currentRoom}</strong>!`;
+        st.innerHTML = `⚖️ <strong>Empate!</strong> Quem fizer mais pontos escapa de: <strong>${appData.room}</strong> e ganha uma Relíquia!`;
       }
     }
 
-    function renderWeaknesses() {
-      const u = cloudData[currentUser];
-      const list = document.getElementById('weakness-list');
-      if (!list) return;
-      list.innerHTML = "";
-
-      Object.keys(EDITAL_DATABASE.topicos_sintese).forEach(top => {
-        const errs = u.mistakes[top] || 0;
-        const card = document.createElement('div');
-        card.className = 'weakness-card';
-        card.innerHTML = `
-          <h5>${top}</h5>
-          <div style="font-size:13px; color:var(--text-muted); margin-bottom:10px;">Erros registrados: ${errs}</div>
-          <button class="btn-action" style="font-size:12px; padding:6px 12px;" onclick="openSynth('${top}')">📖 APRENDER EM PARTES</button>
-        `;
-        list.appendChild(card);
-      });
-    }
-
-    function openSynth(top) {
-      playBeep('click');
-      document.getElementById('modal-title').innerText = `⚡ SÍNTESE DIRECIONADA: ${top.toUpperCase()}`;
-      document.getElementById('modal-body').innerText = EDITAL_DATABASE.topicos_sintese[top];
-      document.getElementById('modal-synth').classList.add('open');
-    }
-
-    function closeSynthModal() {
-      playBeep('click');
-      document.getElementById('modal-synth').classList.remove('open');
-    }
-
-    /* INICIALIZAÇÃO IMEDIATA SEM ESPERAR A REDE */
     window.addEventListener('DOMContentLoaded', () => {
       filterDeck();
       renderHUD();
-      renderBattleboard();
-
-      // Conexão e sincronização em segundo plano
-      loadCloudState().then(() => {
-        subscribeRealtime();
-      });
+      renderBattle();
+      syncCloud();
     });
   </script>
 </body>
