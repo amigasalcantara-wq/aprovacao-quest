@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chronicles of the Kernel: O Despertar da Memória</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-display: 'Press Start 2P', monospace;
+      --font-mono: 'Share Tech Mono', monospace;
+      --font-body: 'Inter', sans-serif;
+
+      /* Tema Cyberpunk / Borahae Acadêmico */
+      --bg-color: #070913;
+      --panel-bg: #0f1322;
+      --panel-border: #6366f1;
+      --accent: #a855f7;
+      --accent-glow: rgba(168, 85, 247, 0.35);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --error: #ef4444;
+      --warn: #f59e0b;
+    }
+
+    body[data-theme="untamed"] {
+      --bg-color: #0d0404;
+      --panel-bg: #1a0808;
+      --panel-border: #991b1b;
+      --accent: #f87171;
+      --accent-glow: rgba(248, 113, 113, 0.35);
+      --text: #fef2f2;
+      --text-muted: #bda3a3;
+    }
+
+    body[data-theme="ghibli"] {
+      --bg-color: #041009;
+      --panel-bg: #092013;
+      --panel-border: #166534;
+      --accent: #4ade80;
+      --accent-glow: rgba(74, 222, 128, 0.35);
+      --text: #f0fdf4;
+      --text-muted: #86a894;
+    }
+
+    body[data-theme="coraline"] {
+      --bg-color: #080917;
+      --panel-bg: #111429;
+      --panel-border: #3730a3;
+      --accent: #ec4899;
+      --accent-glow: rgba(236, 72, 153, 0.35);
+      --text: #fdf2f8;
+      --text-muted: #9ca3af;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+      transition: background-color 0.4s ease;
+    }
+
+    .game-wrapper {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* HEADER & UNIVERSOS */
+    header {
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+
+    .title-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .title-main {
+      font-family: var(--font-display);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+    }
+    .title-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .theme-picker { display: flex; gap: 4px; }
+    .btn-theme {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--panel-border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 5px 9px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-theme.active, .btn-theme:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    /* STATUS ACADÊMICO & MAESTRIA */
+    .status-dashboard {
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      align-items: center;
+    }
+
+    .stat-card {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 8px 12px;
+    }
+    .stat-card h5 {
+      font-family: var(--font-display);
+      font-size: 8px;
+      color: var(--warn);
+      margin-bottom: 4px;
+    }
+    .stat-card strong {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    /* TELA DO JOGO (CANVAS RETRÔ) */
+    .canvas-viewport {
+      position: relative;
+      background: #000;
+      border: 3px solid var(--panel-border);
+      border-radius: 10px;
+      overflow: hidden;
+      width: 100%;
+      height: 440px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.9);
+    }
+
+    canvas#gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      image-rendering: pixelated;
+    }
+
+    /* HUD DE OVERLAY */
+    .hud-overlay {
+      position: absolute;
+      top: 10px; left: 10px; right: 10px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .hud-tag {
+      background: rgba(0,0,0,0.8);
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-family: var(--font-display);
+      font-size: 8px;
+      color: var(--text);
+    }
+
+    /* DIÁLOGO SOCRÁTICO / MISSÃO INTERATIVA */
+    .dialogue-modal {
+      display: none;
+      position: absolute;
+      bottom: 12px; left: 12px; right: 12px;
+      background: var(--panel-bg);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 14px 18px;
+      z-index: 10;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.9);
+      max-height: 85%;
+      overflow-y: auto;
+    }
+    .dialogue-modal.active { display: block; animation: slideUp 0.2s ease; }
+
+    .npc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .npc-name {
+      font-family: var(--font-display);
+      font-size: 10px;
+      color: var(--warn);
+    }
+
+    .npc-lore {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+    }
+
+    .lab-challenge {
+      background: rgba(0,0,0,0.5);
+      border: 1px dashed var(--accent);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .challenge-title {
+      font-family: var(--font-display);
+      font-size: 9px;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .challenge-desc {
+      font-size: 13px;
+      color: #f1f5f9;
+      margin-bottom: 12px;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .btn-choice {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 13px;
+      padding: 10px 14px;
+      text-align: left;
+      cursor: pointer;
+      line-height: 1.4;
+      transition: all 0.2s;
+    }
+    .btn-choice:hover {
+      border-color: var(--accent);
+      background: rgba(168,85,247,0.15);
+      transform: translateX(3px);
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .btn-action {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    .btn-close {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--panel-border);
+      border-radius: 4px;
+      font-size: 12px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    /* CONTROLES MÓVEIS (D-PAD TOUCH) */
+    .touch-controls {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 10px 16px;
+    }
+    @media (max-width: 768px) {
+      .touch-controls { display: flex; }
+      .canvas-viewport { height: 380px; }
+    }
+
+    .dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 40px);
+      grid-template-rows: repeat(3, 40px);
+      gap: 4px;
+    }
+    .dpad button {
+      background: rgba(0,0,0,0.6);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      color: var(--accent);
+      font-family: var(--font-display);
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .dpad button:active { background: var(--accent); color: #000; }
+
+    .btn-touch-act {
+      background: var(--warn);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 62px;
+      height: 62px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(245,158,11,0.3);
+    }
+    .btn-touch-act:active { transform: scale(0.95); }
+
+    @keyframes slideUp {
+      from { transform: translateY(10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body data-theme="bts">
+
+  <div class="game-wrapper">
+    <!-- HEADER -->
+    <header>
+      <div class="title-box">
+        <div class="title-main">⚡ CHRONICLES OF THE KERNEL</div>
+        <div class="title-sub">Amanda • Laboratório de Sistemas & Computação</div>
+      </div>
+      <div class="theme-picker">
+        <button class="btn-theme active" onclick="setTheme('bts', event)">💜 BTS</button>
+        <button class="btn-theme" onclick="setTheme('untamed', event)">🏮 Untamed</button>
+        <button class="btn-theme" onclick="setTheme('ghibli', event)">🌿 Ghibli</button>
+        <button class="btn-theme" onclick="setTheme('coraline', event)">🗝️ Coraline</button>
+      </div>
+    </header>
+
+    <!-- STATUS ACADÊMICO & MAESTRIA DE CONCEITOS -->
+    <div class="status-dashboard">
+      <div class="stat-card">
+        <h5>MAESTRIA DE CÓDIGO</h5>
+        <strong id="stat-rank">🌱 Nível 1: Compilador Iniciante</strong>
+      </div>
+      <div class="stat-card">
+        <h5>EXPERIÊNCIA (XP)</h5>
+        <strong id="stat-xp">0 XP</strong>
+      </div>
+      <div class="stat-card">
+        <h5>DESAFIOS DOMINADOS</h5>
+        <strong id="stat-missions">0 / 4 Núcleos</strong>
+      </div>
+      <div class="stat-card">
+        <h5>GRIMÓRIO DE RELÍQUIAS</h5>
+        <strong id="stat-relics">Nenhuma relíquia</strong>
+      </div>
+    </div>
+
+    <!-- TELA PRINCIPAL (CANVAS TOP-DOWN) -->
+    <div class="canvas-viewport">
+      <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+      <div class="hud-overlay">
+        <div class="hud-tag" id="hud-zone">SETOR: TERMINAL DE BOOT</div>
+        <div class="hud-tag">CONTROLES: [W, A, S, D] • APROXIME E APERTE [ESPAÇO]</div>
+      </div>
+
+      <!-- MODAL DE DIÁLOGO E DESAFIOS PEDAGÓGICOS -->
+      <div class="dialogue-modal" id="dialogueBox">
+        <div class="npc-header">
+          <div class="npc-name" id="npcName">NOME DO NPC</div>
+          <span style="font-size:11px; color:var(--text-muted);" id="npcRole">DISCIPLINA</span>
+        </div>
+        <div class="npc-lore" id="npcLore">Lore e explicação contextualizada.</div>
+
+        <div class="lab-challenge" id="challengeBox">
+          <div class="challenge-title" id="challengeTitle">DESAFIO DE APLICAÇÃO</div>
+          <div class="challenge-desc" id="challengeDesc">Descrição do problema real.</div>
+          <div class="options-grid" id="challengeOpts"></div>
+        </div>
+
+        <div class="action-row" id="dialogueActions">
+          <button class="btn-close" onclick="closeDialogue()">Fechar Painel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLES TOUCH PARA SMARTPHONE -->
+    <div class="touch-controls">
+      <div class="dpad">
+        <div></div>
+        <button onclick="movePlayer(0, -25)">▲</button>
+        <div></div>
+        <button onclick="movePlayer(-25, 0)">◀</button>
+        <div></div>
+        <button onclick="movePlayer(25, 0)">▶</button>
+        <div></div>
+        <button onclick="movePlayer(0, 25)">▼</button>
+        <div></div>
+      </div>
+      <div style="font-size:12px; color:var(--text-muted); text-align:center;">
+        Caminhe até um autômato<br>e toque em <strong>INTERAGIR</strong>
+      </div>
+      <button class="btn-touch-act" onclick="triggerInteract()">AÇÃO</button>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       1. ARQUITETURA DO JOGO E MAPA ACADÊMICO
+       ========================================================= */
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let currentTheme = "bts";
+
+    const RELIC_LIST = {
+      bts: "💜 Microfone Imperial de Baixo Nível",
+      untamed: "🏮 Flauta Chenqing dos Ponteiros",
+      ghibli: "🔥 Fogo Vivo de Calcifer (TLB Hit)",
+      coraline: "🗝️ Chave dos Inodes e Diretórios"
+    };
+
+    // Os 4 Distritos Acadêmicos baseados nos seus materiais
+    const ZONES = [
+      {
+        id: "ponteiros",
+        name: "Forjas do Heap (Linguagem C)",
+        x: 60, y: 50, w: 160, h: 120,
+        color: "#311042",
+        npc: {
+          name: "Mestre Dennis Ritchie",
+          role: "Técnicas de Programação // Ponteiros",
+          symbol: "🏮",
+          lore: "Bem-vinda às Forjas da Memória! Em Linguagem C, manipular diretamente a memória dá imenso poder ao programador, mas exige extremo rigor.",
+          challenge: {
+            title: "O Enigma do Escaninho de Memória (0x104)",
+            desc: "Temos uma variável inteira 'int valor = 42;' alocada no endereço 0x104. Queremos que a função 'dobrar()' altere o valor original para 84 sem criar cópias na pilha.",
+            options: [
+              {
+                text: "Passar '&valor' para a função e declarar o parâmetro como 'int *p', alterando com '*p = 84;'.",
+                correct: true,
+                feedback: "Perfeito! O operador '&' passa o endereço físico da variável (passagem por referência), e o operador '*' desreferencia o ponteiro, alterando diretamente o conteúdo no endereço 0x104 sem duplicar dados!"
+              },
+              {
+                text: "Passar 'valor' diretamente e na função fazer 'valor = 84;'.",
+                correct: false,
+                feedback: "Incorreto! Em C, argumentos padrão são passados por VALOR (cópia). A função alteraria apenas a cópia local na sua própria pilha, deixando o original em 42."
+              },
+              {
+                text: "Alocar com 'malloc(sizeof(valor))' sem guardar o ponteiro de retorno.",
+                correct: false,
+                feedback: "Perigo de Memory Leak! Alocar memória na heap sem salvar o endereço em um ponteiro consome RAM desnecessariamente e torna o bloco inacessível para liberação com free()."
+              }
+            ]
+          }
+        }
+      },
+      {
+        id: "memoria_virtual",
+        name: "Labirinto Virtual (Sistemas Operacionais)",
+        x: 580, y: 50, w: 160, h: 120,
+        color: "#083344",
+        npc: {
+          name: "Guardião da MMU & Paginação",
+          role: "Sistemas Operacionais // Unidade 3",
+          symbol: "🔥",
+          lore: "O reino virtual permite que os processos acessem um espaço muito maior do que a RAM física! Mas sem a Unidade de Gerenciamento de Memória (MMU), o sistema entra em colapso.",
+          challenge: {
+            title: "Tradução de Endereços & Cache TLB",
+            desc: "A CPU gera uma referência ao endereço lógico (Página 1, deslocamento 30). O sistema precisa buscar o dado com a menor latência possível.",
+            options: [
+              {
+                text: "A MMU consulta primeiro a cache TLB; ocorrendo 'TLB hit', obtém o bloco físico imediatamente sem ir à memória principal.",
+                correct: true,
+                feedback: "Exato! A Translation Lookaside Buffer (TLB) guarda as entradas recentes da tabela de páginas. O 'TLB hit' evita um acesso extra à memória física graças ao princípio da localidade!"
+              },
+              {
+                text: "O sistema operacional sempre lê primeiro a tabela de páginas armazenada no disco rígido.",
+                correct: false,
+                feedback: "Catastrófico! O disco é ordens de grandeza mais lento que a RAM. O disco só é acessado se ocorrer um 'Page Fault' (falta de página)."
+              },
+              {
+                text: "A tabela de páginas descarta a página imediatamente utilizando o algoritmo First-In-First-Out.",
+                correct: false,
+                feedback: "Incorreto! O algoritmo de substituição (como LRU ou FIFO) só é acionado quando a memória física estiver cheia e for necessário abrir espaço para um novo bloco."
+              }
+            ]
+          }
+        }
+      },
+      {
+        id: "arquivos_io",
+        name: "Câmara dos Discos & I/O (Sistemas Operacionais)",
+        x: 60, y: 230, w: 160, h: 120,
+        color: "#451a03",
+        npc: {
+          name: "Sentinela do Subsistema de I/O",
+          role: "Sistemas Operacionais // Unidade 4",
+          symbol: "🗝️",
+          lore: "A transferência de dados entre discos magnéticos, SSDs e periféricos não pode manter o processador refém em espera ociosa!",
+          challenge: {
+            title: "Arquitetura de Entrada e Saída",
+            desc: "Uma aplicação faz uma leitura pesada de arquivo em disco. Qual mecanismo impede que a CPU fique travada em laço de polling aguardando o dispositivo lento?",
+            options: [
+              {
+                text: "I/O baseado em Interrupção e DMA (Direct Memory Access), permitindo que a CPU processe outras tarefas enquanto o controlador transfere dados.",
+                correct: true,
+                feedback: "Excelente! O módulo de I/O avisa a CPU por sinal de interrupção quando a operação termina, e o DMA transfere blocos direto para a memória sem sobrecarregar o processador!"
+              },
+              {
+                text: "I/O Programado com laço contínuo de verificação de status na CPU.",
+                correct: false,
+                feedback: "Esse é justamente o problema! No I/O programado, a CPU fica monitorando ativamente o dispositivo lento e desperdiça preciosos ciclos de computação."
+              },
+              {
+                text: "Formatar o disco magnético utilizando tabela em nível único sem diretórios.",
+                correct: false,
+                feedback: "Incorreto! Sistemas de diretório em nível único são limitados, impedem nomes duplicados de arquivos e não têm relação com a liberação da CPU em operações de I/O."
+              }
+            ]
+          }
+        }
+      },
+      {
+        id: "dialetica",
+        name: "Templo da Dialética & Metodologia",
+        x: 580, y: 230, w: 160, h: 120,
+        color: "#4a044e",
+        npc: {
+          name: "Oráculo do Pensamento Crítico",
+          role: "Construção do Pensamento // Leitura Acadêmica",
+          symbol: "💜",
+          lore: "Não basta programar algoritmos: é preciso saber fundamentar hipóteses com rigor científico e desmascarar argumentos falaciosos.",
+          challenge: {
+            title: "Doxa vs. Episteme e Rigor Conceitual",
+            desc: "Ao redigir uma dissertação ou projeto técnico de software, como assegurar a validade e a legitimidade das conclusões apresentadas?",
+            options: [
+              {
+                text: "Superar a doxa (mera opinião subjetiva) através de fundamentação lógica, evidências demonstráveis e diálogo crítico com o estado da arte.",
+                correct: true,
+                feedback: "Magistral! O pensamento filosófico e a produção acadêmica exigem transitar da opinião espontânea (doxa) para o conhecimento justificado e metodologicamente estruturado (episteme)!"
+              },
+              {
+                text: "Adotar argumentos de autoridade incontestáveis sem análise metodológica dos dados.",
+                correct: false,
+                feedback: "Falácia de autoridade! A ciência e a filosofia não aceitam dogmas cegos: exigem consistência interna e comprovação reflexiva."
+              },
+              {
+                text: "Redigir o texto sem preocupação com normas de citação, assumindo senso comum como verdade.",
+                correct: false,
+                feedback: "Incorreto! Isso caracteriza plágio ou senso comum ingênuo, desprovido de rigor acadêmico e validade científica."
+              }
+            ]
+          }
+        }
+      }
+    ];
+
+    // Jogador
+    const player = {
+      x: 400,
+      y: 200,
+      speed: 4,
+      color: "#a855f7"
+    };
+
+    const keys = {};
+    window.addEventListener("keydown", e => {
+      keys[e.key.toLowerCase()] = true;
+      if (e.key === " " || e.key === "Enter") triggerInteract();
+    });
+    window.addEventListener("keyup", e => { keys[e.key.toLowerCase()] = false; });
+
+    /* =========================================================
+       2. PERSISTÊNCIA DE PROGRESSO LOCAL (SAVE STATE)
+       ========================================================= */
+    const SAVE_KEY = "kernel_chronicles_amanda_save";
+
+    function loadSave() {
+      try {
+        const s = localStorage.getItem(SAVE_KEY);
+        if (s) return JSON.parse(s);
+      } catch(e) {}
+      return { xp: 0, completed: [], relics: [] };
+    }
+
+    let userProgress = loadSave();
+
+    function persistProgress() {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(userProgress));
+      updateDashboard();
+    }
+
+    /* =========================================================
+       3. GAME LOOP & RENDERIZAÇÃO CANVAS
+       ========================================================= */
+    function updateGame() {
+      if (keys["w"] || keys["arrowup"]) player.y = Math.max(20, player.y - player.speed);
+      if (keys["s"] || keys["arrowdown"]) player.y = Math.min(canvas.height - 20, player.y + player.speed);
+      if (keys["a"] || keys["arrowleft"]) player.x = Math.max(20, player.x - player.speed);
+      if (keys["d"] || keys["arrowright"]) player.x = Math.min(canvas.width - 20, player.x + player.speed);
+
+      // Detecta setor
+      let activeZone = "TERMINAL DE BOOT";
+      ZONES.forEach(z => {
+        if (player.x >= z.x && player.x <= z.x + z.w && player.y >= z.y && player.y <= z.y + z.h) {
+          activeZone = z.name.toUpperCase();
+        }
+      });
+      document.getElementById("hud-zone").innerText = `SETOR: ${activeZone}`;
+    }
+
+    function drawGame() {
+      // Fundo Matriz do Kernel
+      ctx.fillStyle = "#030712";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Barramentos e trilhas de circuito
+      ctx.fillStyle = "#1e1b4b";
+      ctx.fillRect(0, 185, canvas.width, 30);
+      ctx.fillRect(385, 0, 30, canvas.height);
+
+      // Linhas de dados em neon suave
+      ctx.strokeStyle = "rgba(99, 102, 241, 0.25)";
+      ctx.lineWidth = 1;
+      for (let i = 0; i < canvas.width; i += 40) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height);
+        ctx.stroke();
+      }
+
+      // Desenha as 4 Zonas Acadêmicas
+      ZONES.forEach(z => {
+        ctx.fillStyle = z.color;
+        ctx.fillRect(z.x, z.y, z.w, z.h);
+
+        const isDone = userProgress.completed.includes(z.id);
+        ctx.strokeStyle = isDone ? "#10b981" : "rgba(255,255,255,0.25)";
+        ctx.lineWidth = isDone ? 3 : 1.5;
+        ctx.strokeRect(z.x, z.y, z.w, z.h);
+
+        // Título da Zona
+        ctx.fillStyle = isDone ? "#10b981" : "#fff";
+        ctx.font = "8px 'Press Start 2P'";
+        ctx.fillText(z.id.toUpperCase(), z.x + 8, z.y + 18);
+
+        // Ícone / Símbolo do Guardião
+        ctx.font = "24px serif";
+        ctx.fillText(z.npc.symbol, z.x + z.w/2 - 12, z.y + z.h/2 + 10);
+      });
+
+      // Desenha Amanda (Avatar em Pixel Art)
+      ctx.fillStyle = player.color;
+      ctx.fillRect(player.x - 9, player.y - 9, 18, 18);
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(player.x - 5, player.y - 5, 3, 3);
+      ctx.fillRect(player.x + 2, player.y - 5, 3, 3);
+
+      // Indicador de interação próxima
+      const near = getNearbyZone();
+      if (near) {
+        ctx.strokeStyle = "#fbbf24";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, 24, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = "#fbbf24";
+        ctx.font = "8px 'Press Start 2P'";
+        ctx.fillText("[ESPAÇO]", player.x - 24, player.y - 18);
+      }
+    }
+
+    function gameLoop() {
+      updateGame();
+      drawGame();
+      requestAnimationFrame(gameLoop);
+    }
+
+    /* =========================================================
+       4. INTERAÇÃO E DESAFIOS PEDAGÓGICOS
+       ========================================================= */
+    function getNearbyZone() {
+      return ZONES.find(z => {
+        const cx = z.x + z.w / 2;
+        const cy = z.y + z.h / 2;
+        return Math.hypot(player.x - cx, player.y - cy) < 85;
+      });
+    }
+
+    function triggerInteract() {
+      const zone = getNearbyZone();
+      if (!zone) return;
+
+      const modal = document.getElementById("dialogueBox");
+      document.getElementById("npcName").innerText = `${zone.npc.symbol} ${zone.npc.name}`;
+      document.getElementById("npcRole").innerText = zone.npc.role;
+      document.getElementById("npcLore").innerText = zone.npc.lore;
+
+      document.getElementById("challengeTitle").innerText = `DESAFIO: ${zone.npc.challenge.title.toUpperCase()}`;
+      document.getElementById("challengeDesc").innerText = zone.npc.challenge.desc;
+
+      const optsContainer = document.getElementById("challengeOpts");
+      optsContainer.innerHTML = "";
+
+      zone.npc.challenge.options.forEach((opt, idx) => {
+        const b = document.createElement("button");
+        b.className = "btn-choice";
+        b.innerHTML = `<strong>${String.fromCharCode(65 + idx)})</strong> ${opt.text}`;
+        b.onclick = () => solveChallenge(zone, opt);
+        optsContainer.appendChild(b);
+      });
+
+      document.getElementById("dialogueActions").innerHTML = `
+        <button class="btn-close" onclick="closeDialogue()">Suspender Interação</button>
+      `;
+
+      modal.classList.add("active");
+    }
+
+    function solveChallenge(zone, opt) {
+      const loreEl = document.getElementById("npcLore");
+      const boxEl = document.getElementById("challengeBox");
+      const actEl = document.getElementById("dialogueActions");
+
+      if (opt.correct) {
+        userProgress.xp += 150;
+        if (!userProgress.completed.includes(zone.id)) {
+          userProgress.completed.push(zone.id);
+          const r = RELIC_LIST[currentTheme];
+          if (!userProgress.relics.includes(r)) userProgress.relics.push(r);
+        }
+
+        loreEl.innerHTML = `🌟 <strong>CONCEITO ASSIMILADO COM SUCESSO!</strong><br>${opt.feedback}`;
+        boxEl.innerHTML = `
+          <div style="color:var(--success); font-weight:700; font-size:14px; padding:10px 0;">
+            +150 XP! O setor foi desbloqueado e integrado ao seu mapa de conhecimento.
+          </div>
+        `;
+      } else {
+        loreEl.innerHTML = `⚠️ <strong>INCONSISTÊNCIA DETECTADA:</strong><br>${opt.feedback}`;
+        boxEl.innerHTML = `
+          <div style="color:var(--error); font-weight:600; font-size:13px; padding:10px 0;">
+            Revise a fundamentação do conceito e tente novamente para restabelecer o núcleo!
+          </div>
+        `;
+      }
+
+      persistProgress();
+
+      actEl.innerHTML = `
+        <button class="btn-action" onclick="closeDialogue()">Retomar Jornada ❯</button>
+      `;
+    }
+
+    function closeDialogue() {
+      document.getElementById("dialogueBox").classList.remove("active");
+    }
+
+    function movePlayer(dx, dy) {
+      player.x = Math.max(20, Math.min(canvas.width - 20, player.x + dx));
+      player.y = Math.max(20, Math.min(canvas.height - 20, player.y + dy));
+    }
+
+    /* =========================================================
+       5. SISTEMA DE RANK & TEMAS
+       ========================================================= */
+    function updateDashboard() {
+      document.getElementById("stat-xp").innerText = `${userProgress.xp} XP`;
+      document.getElementById("stat-missions").innerText = `${userProgress.completed.length} / ${ZONES.length} Núcleos`;
+      document.getElementById("stat-relics").innerText = userProgress.relics.length > 0 ? userProgress.relics.join(" • ") : "Nenhuma relíquia";
+
+      // Ranks baseados no domínio
+      const total = userProgress.completed.length;
+      let rank = "🌱 Nível 1: Compilador Iniciante";
+      if (total === 1) rank = "⚙️ Nível 2: Mestre das Funções";
+      else if (total === 2) rank = "🧠 Nível 3: Alquimista de Memória";
+      else if (total >= 3) rank = "👑 Nível 4: Guardiã do Kernel";
+
+      document.getElementById("stat-rank").innerText = rank;
+    }
+
+    function setTheme(th, e) {
+      currentTheme = th;
+      document.body.setAttribute("data-theme", th);
+      document.querySelectorAll(".btn-theme").forEach(b => b.classList.remove("active"));
+      if (e) e.target.classList.add("active");
+      player.color = getComputedStyle(document.body).getPropertyValue("--accent").trim();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      setTheme("bts");
+      updateDashboard();
+      gameLoop();
+    });
+  </script>
+</body>
+</html>
